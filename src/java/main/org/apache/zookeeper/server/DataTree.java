@@ -773,6 +773,18 @@ public class DataTree {
                             createTxn.getContainer(),
                             createTxn.getParentCVersion(),
                             header.getZxid(), header.getTime());
+                    if (createTxn.getContainer()) {
+                        createNode(
+                                createTxn.getPath() + "/#",
+                                null,
+                                null,
+                                header.getClientId(),
+                                false,
+                                -1,
+                                // TODO does having two znodes with the same zkid break any assumption? 
+                                header.getZxid(),
+                                header.getTime());
+                    }
                     break;
                 case OpCode.delete:
                     DeleteTxn deleteTxn = (DeleteTxn) txn;

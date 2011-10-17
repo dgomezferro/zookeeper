@@ -65,6 +65,7 @@ public class EphemeralContainerTest extends ClientBase {
             zk1.create("/container", null, Ids.OPEN_ACL_UNSAFE,
                     CreateMode.EPHEMERAL_CONTAINER);
             zk1.create("/container/child", null, Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL);
+            zk1.delete("/container/#", -1);
             MyWatcher w1 = new MyWatcher("/container");
             Assert.assertNotNull(zk2.exists("/container", w1));
             MyWatcher w2 = new MyWatcher("/container/child");
@@ -95,6 +96,7 @@ public class EphemeralContainerTest extends ClientBase {
             zk1.create("/container", null, Ids.OPEN_ACL_UNSAFE,
                     CreateMode.EPHEMERAL_CONTAINER);
             zk2.create("/container/child", null, Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            zk2.delete("/container/#", -1);
             MyWatcher w1 = new MyWatcher("/container");
             Assert.assertNotNull(zk1.exists("/container", w1));
             MyWatcher w2 = new MyWatcher("/container");
@@ -152,17 +154,21 @@ public class EphemeralContainerTest extends ClientBase {
         final int SIZE = 10;
         ZooKeeper zk1 = createClient();
         try {
-            String path = "";
+            String path = "/c";
+            zk1.create(path, null, Ids.OPEN_ACL_UNSAFE,
+                    CreateMode.EPHEMERAL_CONTAINER);
             for (int i = 0; i < SIZE; i++) {
-                path += "/c";
-                zk1.create(path, null, Ids.OPEN_ACL_UNSAFE,
+                String childPath = path + "/c";
+                zk1.create(childPath, null, Ids.OPEN_ACL_UNSAFE,
                         CreateMode.EPHEMERAL_CONTAINER);
+                zk1.delete(path + "/#", -1);
+                path = childPath;
             }
             MyWatcher w1 = new MyWatcher("/c");
             MyWatcher w2 = new MyWatcher(path);
             Assert.assertNotNull(zk1.exists("/c", w1));
             Assert.assertNotNull(zk1.exists(path, w2));
-            zk1.delete(path, -1);
+            zk1.delete(path + "/#", -1);
             Assert.assertTrue(w1.matches());
             Assert.assertTrue(w2.matches());
             Assert.assertNull(zk1.exists("/c", false));

@@ -47,12 +47,12 @@ public enum CreateMode {
     /**
      * The znode will be deleted upon the deletion of its last child.
      */
-    EPHEMERAL_CONTAINER (4, true, false, true),
+    EPHEMERAL_CONTAINER (4, false, false, true),
     /**
      * The znode will be deleted upon the deletion of its last child, and its name
      * will be appended with a monotonically increasing number.
      */
-    EPHEMERAL_SEQUENTIAL_CONTAINER (5, true, true, true);
+    EPHEMERAL_SEQUENTIAL_CONTAINER (5, false, true, true);
     
 
     private static final Logger LOG = LoggerFactory.getLogger(CreateMode.class);

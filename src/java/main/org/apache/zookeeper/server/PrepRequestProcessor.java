@@ -334,8 +334,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
                 } catch (KeeperException.NoNodeException e) {
                     // ignore this one
                 }
-                boolean ephemeralParent = parentRecord.stat.getEphemeralOwner() != 0
-                        && !parentRecord.stat.getEphemeralContainer();
+                boolean ephemeralParent = parentRecord.stat.getEphemeralOwner() != 0;
                 if (ephemeralParent) {
                     throw new KeeperException.NoChildrenForEphemeralsException(path);
                 }
