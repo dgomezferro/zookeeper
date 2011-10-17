@@ -143,9 +143,9 @@ public class LoadFromLogTest extends ZKTestCase implements  Watcher {
         File tmpDir = ClientBase.createTmpDir();
         FileTxnSnapLog logFile = new FileTxnSnapLog(tmpDir, tmpDir);
         DataTree dt = new DataTree();
-        dt.createNode("/test", new byte[0], null, 0, -1, 1, 1);
+        dt.createNode("/test", new byte[0], null, 0, false, -1, 1, 1);
         for (count = 1; count <= 3; count++) {
-            dt.createNode("/test/" + count, new byte[0], null, 0, -1, count,
+            dt.createNode("/test/" + count, new byte[0], null, 0, false, -1, count,
                     System.currentTimeMillis());
         }
         DataNode zk = dt.getNode("/test");
@@ -191,7 +191,7 @@ public class LoadFromLogTest extends ZKTestCase implements  Watcher {
         } else if (type == OpCode.create) {
             txnHeader = new TxnHeader(0xabcd, 0x123, prevPzxid + 1,
                     System.currentTimeMillis(), OpCode.create);
-            txn = new CreateTxn(path, new byte[0], null, false, cversion);
+            txn = new CreateTxn(path, new byte[0], null, false, false, cversion);
         }
         logFile.processTransaction(txnHeader, dt, null, txn);
 
@@ -219,7 +219,7 @@ public class LoadFromLogTest extends ZKTestCase implements  Watcher {
         FileTxnLog txnLog = new FileTxnLog(tmpDir);
         TxnHeader txnHeader = new TxnHeader(0xabcd, 0x123, 0x123,
               System.currentTimeMillis(), OpCode.create);
-        Record txn = new CreateTxn("/Test", new byte[0], null, false, 1);
+        Record txn = new CreateTxn("/Test", new byte[0], null, false, false, 1);
         txnLog.append(txnHeader, txn);
         FileInputStream in = new FileInputStream(tmpDir.getPath() + "/log." +
               Long.toHexString(txnHeader.getZxid()));

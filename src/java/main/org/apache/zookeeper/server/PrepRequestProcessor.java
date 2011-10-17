@@ -334,15 +334,21 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
                 } catch (KeeperException.NoNodeException e) {
                     // ignore this one
                 }
-                boolean ephemeralParent = parentRecord.stat.getEphemeralOwner() != 0;
+                boolean ephemeralParent = parentRecord.stat.getEphemeralOwner() != 0
+                        && !parentRecord.stat.getEphemeralContainer();
                 if (ephemeralParent) {
                     throw new KeeperException.NoChildrenForEphemeralsException(path);
                 }
                 int newCversion = parentRecord.stat.getCversion()+1;
                 request.txn = new CreateTxn(path, createRequest.getData(),
                         listACL,
-                        createMode.isEphemeral(), newCversion);
+                        createMode.isEphemeral(),
+                        createMode.isContainer(),
+                        newCversion);
                 StatPersisted s = new StatPersisted();
+                if (createMode.isContainer()) {
+                    s.setEphemeralContainer(true);
+                }
                 if (createMode.isEphemeral()) {
                     s.setEphemeralOwner(request.sessionId);
                 }

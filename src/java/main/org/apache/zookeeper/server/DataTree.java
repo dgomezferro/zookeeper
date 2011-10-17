@@ -310,6 +310,7 @@ public class DataTree {
         to.setPzxid(from.getPzxid());
         to.setVersion(from.getVersion());
         to.setEphemeralOwner(from.getEphemeralOwner());
+        to.setEphemeralContainer(from.getEphemeralContainer());
     }
 
     static public void copyStat(Stat from, Stat to) {
@@ -324,6 +325,7 @@ public class DataTree {
         to.setEphemeralOwner(from.getEphemeralOwner());
         to.setDataLength(from.getDataLength());
         to.setNumChildren(from.getNumChildren());
+        to.setEphemeralContainer(from.getEphemeralContainer());
     }
 
     /**
@@ -427,7 +429,7 @@ public class DataTree {
      * @throws KeeperException
      */
     public String createNode(String path, byte data[], List<ACL> acl,
-            long ephemeralOwner, int parentCVersion, long zxid, long time)
+            long ephemeralOwner, boolean ephemeralContainer, int parentCVersion, long zxid, long time)
             throws KeeperException.NoNodeException,
             KeeperException.NodeExistsException {
         int lastSlash = path.lastIndexOf('/');
@@ -442,6 +444,7 @@ public class DataTree {
         stat.setVersion(0);
         stat.setAversion(0);
         stat.setEphemeralOwner(ephemeralOwner);
+        stat.setEphemeralContainer(ephemeralContainer);
         DataNode parent = nodes.get(parentName);
         if (parent == null) {
             throw new KeeperException.NoNodeException();
@@ -563,6 +566,10 @@ public class DataTree {
         childWatches.triggerWatch(path, EventType.NodeDeleted, processed);
         childWatches.triggerWatch("".equals(parentName) ? "/" : parentName,
                 EventType.NodeChildrenChanged);
+        
+        if (parent.stat.getEphemeralContainer() && parent.getChildren().isEmpty()) {
+            deleteNode(parentName, zxid);
+        }
     }
 
     public Stat setData(String path, byte data[], int version, long zxid,
@@ -763,6 +770,7 @@ public class DataTree {
                             createTxn.getData(),
                             createTxn.getAcl(),
                             createTxn.getEphemeral() ? header.getClientId() : 0,
+                            createTxn.getContainer(),
                             createTxn.getParentCVersion(),
                             header.getZxid(), header.getTime());
                     break;

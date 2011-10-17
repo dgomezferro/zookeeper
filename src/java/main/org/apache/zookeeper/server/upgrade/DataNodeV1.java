@@ -90,6 +90,7 @@ public class DataNodeV1 implements Record {
         to.setEphemeralOwner(stat.getEphemeralOwner());
         to.setDataLength(data.length);
         to.setNumChildren(children.size());
+        to.setEphemeralContainer(false);
     }
 
     public void deserialize(InputArchive archive, String tag)

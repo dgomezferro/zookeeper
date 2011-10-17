@@ -38,6 +38,7 @@ module org.apache.zookeeper.data {
         int dataLength;  //length of the data in the node
         int numChildren; //number of children of this node
         long pzxid;      // last modified children
+        boolean ephemeralContainer; // its a ephemeral container
     }
     // information explicitly stored by the server persistently
     class StatPersisted {
@@ -50,6 +51,7 @@ module org.apache.zookeeper.data {
         int aversion;    // acl version
         long ephemeralOwner; // owner id if ephemeral, 0 otw
         long pzxid;      // last modified children
+        boolean ephemeralContainer; // its a ephemeral container
     }
 
    // information explicitly stored by the version 1 database of servers 
@@ -243,12 +245,14 @@ module org.apache.zookeeper.txn {
         buffer data;
         vector<org.apache.zookeeper.data.ACL> acl;
         boolean ephemeral;
+        boolean container;
     }
     class CreateTxn {
         ustring path;
         buffer data;
         vector<org.apache.zookeeper.data.ACL> acl;
         boolean ephemeral;
+        boolean container;
         int parentCVersion;
     }
     class DeleteTxn {

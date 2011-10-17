@@ -250,6 +250,7 @@ public class UpgradeSnapShotV1 implements UpgradeSnapShot {
         stat.setCversion(oldStat.getCversion());
         stat.setCzxid(oldStat.getCzxid());
         stat.setEphemeralOwner(oldStat.getEphemeralOwner());
+        stat.setEphemeralContainer(false);
         stat.setMtime(oldStat.getMtime());
         stat.setMzxid(oldStat.getMzxid());
         stat.setVersion(oldStat.getVersion());

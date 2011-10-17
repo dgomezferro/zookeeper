@@ -144,6 +144,7 @@ public class DataTreeV1 {
         to.setEphemeralOwner(from.getEphemeralOwner());
         to.setDataLength(from.getDataLength());
         to.setNumChildren(from.getNumChildren());
+        to.setEphemeralContainer(from.getEphemeralContainer());
     }
 
 

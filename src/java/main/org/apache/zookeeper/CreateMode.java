@@ -29,32 +29,44 @@ public enum CreateMode {
     /**
      * The znode will not be automatically deleted upon client's disconnect.
      */
-    PERSISTENT (0, false, false),
+    PERSISTENT (0, false, false, false),
     /**
     * The znode will not be automatically deleted upon client's disconnect,
     * and its name will be appended with a monotonically increasing number.
     */
-    PERSISTENT_SEQUENTIAL (2, false, true),
+    PERSISTENT_SEQUENTIAL (2, false, true, false),
     /**
      * The znode will be deleted upon the client's disconnect.
      */
-    EPHEMERAL (1, true, false),
+    EPHEMERAL (1, true, false, false),
     /**
      * The znode will be deleted upon the client's disconnect, and its name
      * will be appended with a monotonically increasing number.
      */
-    EPHEMERAL_SEQUENTIAL (3, true, true);
+    EPHEMERAL_SEQUENTIAL (3, true, true, false),
+    /**
+     * The znode will be deleted upon the deletion of its last child.
+     */
+    EPHEMERAL_CONTAINER (4, true, false, true),
+    /**
+     * The znode will be deleted upon the deletion of its last child, and its name
+     * will be appended with a monotonically increasing number.
+     */
+    EPHEMERAL_SEQUENTIAL_CONTAINER (5, true, true, true);
+    
 
     private static final Logger LOG = LoggerFactory.getLogger(CreateMode.class);
 
     private boolean ephemeral;
     private boolean sequential;
+    private boolean container;
     private int flag;
 
-    CreateMode(int flag, boolean ephemeral, boolean sequential) {
+    CreateMode(int flag, boolean ephemeral, boolean sequential, boolean container) {
         this.flag = flag;
         this.ephemeral = ephemeral;
         this.sequential = sequential;
+        this.container = container;
     }
 
     public boolean isEphemeral() { 
@@ -63,6 +75,10 @@ public enum CreateMode {
 
     public boolean isSequential() { 
         return sequential;
+    }
+
+    public boolean isContainer() {
+        return container;
     }
 
     public int toFlag() {
@@ -80,7 +96,11 @@ public enum CreateMode {
 
         case 2: return CreateMode.PERSISTENT_SEQUENTIAL;
 
-        case 3: return CreateMode.EPHEMERAL_SEQUENTIAL ;
+        case 3: return CreateMode.EPHEMERAL_SEQUENTIAL;
+        
+        case 4: return CreateMode.EPHEMERAL_CONTAINER;
+        
+        case 5: return CreateMode.EPHEMERAL_SEQUENTIAL_CONTAINER;
 
         default:
             LOG.error("Received an invalid flag value to convert to a CreateMode");

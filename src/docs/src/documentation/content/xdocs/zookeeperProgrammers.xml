@@ -244,8 +244,24 @@
         overflow when incremented beyond 2147483647 (resulting in a
         name "&lt;path&gt;-2147483647").</para>
       </section>
-    </section>
 
+      <section>
+        <title>Ephemeral Containers</title>
+
+        <para>Ephemeral containers have been introduced to allow the creation of
+        children under a non persistent node, which is not possible using
+        ephemeral nodes. They are tied to the session that created
+        them until a first child is created. If the session expires before this,
+        they are deleted like a regular ephemeral node. Otherwise, they will
+        be deleted when its last child goes away, either
+        because it was explicitly deleted or because it was an
+        ephemeral node whose session finished. There is example pseudocode
+        using ephemeral containers for the implementation of barriers, see 
+        <ulink url="recipes.html#sc_ephemeral_containers">Double Barrier
+        recipe</ulink>. </para>
+      </section>
+    </section>
+    
     <section id="sc_timeInZk">
       <title>Time in ZooKeeper</title>
 

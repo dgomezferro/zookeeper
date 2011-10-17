@@ -245,6 +245,83 @@
       single process wakes up on each node deletion except for the last node,
       which wakes up everyone when it is removed.</para>
     </section>
+    
+    <section id="sc_ephemeral_containers">
+      <title>Ephemeral Containers</title>
+      <para> Ephemeral containers allow us to simplify the exit from the barrier.
+      Instead of checking explicitly the exit of the rest of processes, we
+      just wait until the barrier is deleted, which will happen when every child
+      disappears. It assumes there is an ephemeral container named ‘‘b’’,
+      created with the call <emphasis role="bold">create(b, <emphasis>
+      EPHEMERAL_CONTAINER</emphasis>)</emphasis>. They also have the nice property
+      of cleaning up after themselves, for example if no process joins the barrier
+      or if all of them crash just after entering it.
+      </para>
+      
+      <informaltable colsep="0" frame="none" rowsep="0">
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry align="center"><emphasis
+                                       role="bold">Enter</emphasis></entry>
+
+              <entry align="center"><emphasis
+                                       role="bold">Leave</emphasis></entry>
+            </row>
+
+            <row>
+              <entry align="left"><orderedlist>
+                  <listitem>
+                    <para>Create a name <emphasis><emphasis>n</emphasis> =
+                        <emphasis>b</emphasis>+“/”+<emphasis>p</emphasis></emphasis></para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Set watch: <emphasis
+                                        role="bold">getData(<emphasis>b</emphasis>,
+                        true, null)</emphasis></para>
+                  </listitem>
+
+                  <listitem>
+                    <para>Create child: <emphasis role="bold">create(
+                        <emphasis>n</emphasis>, EPHEMERAL)</emphasis></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><emphasis role="bold">L = getChildren(b,
+                        false)</emphasis></para>
+                  </listitem>
+
+                  <listitem>
+                    <para>if fewer children in L than<emphasis>
+                        x</emphasis>, wait for watch event</para>
+                  </listitem>
+
+                  <listitem>
+                    <para>else <emphasis role="bold">setData(b, [1])</emphasis></para>
+                  </listitem>
+                </orderedlist></entry>
+
+              <entry><orderedlist>
+                  <listitem>
+                    <para>delete(n)</para>
+                  </listitem>
+                  
+                  <listitem>
+                    <para>Set watch: <emphasis
+                                        role="bold">exists(<emphasis>b</emphasis>,
+                        true)</emphasis></para>
+                  </listitem>
+                  
+                  <listitem>
+                    <para>if it exists, wait for watch event, otherwise exit</para>
+                  </listitem>
+                </orderedlist></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
+	</section>
   </section>
 
   <section id="sc_recipes_Queues">

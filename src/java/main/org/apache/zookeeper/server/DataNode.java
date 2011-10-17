@@ -151,6 +151,7 @@ public class DataNode implements Record {
         // for every create there is a delete except for the children still present
         to.setCversion(stat.getCversion()*2 - numChildren);
         to.setNumChildren(numChildren);
+        to.setEphemeralContainer(stat.getEphemeralContainer());
     }
 
     synchronized public void deserialize(InputArchive archive, String tag)

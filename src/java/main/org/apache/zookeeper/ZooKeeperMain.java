@@ -65,7 +65,7 @@ public class ZooKeeperMain {
     static {
         commandMap.put("connect", "host:port");
         commandMap.put("close","");
-        commandMap.put("create", "[-s] [-e] path data acl");
+        commandMap.put("create", "[-s] [-e|-c] path [data [acl]]");
         commandMap.put("delete","path [version]");
         commandMap.put("rmr","path");
         commandMap.put("set","path data [version]");
@@ -627,6 +627,7 @@ public class ZooKeeperMain {
         boolean watch = args.length > 2;
         String path = null;
         List<ACL> acl = Ids.OPEN_ACL_UNSAFE;
+        byte payload [] = null;
         LOG.debug("Processing " + cmd);
         
         if (cmd.equals("quit")) {
@@ -671,26 +672,35 @@ public class ZooKeeperMain {
             return false;
         }
         
-        if (cmd.equals("create") && args.length >= 3) {
+        if (cmd.equals("create") && args.length >= 2) {
             int first = 0;
             CreateMode flags = CreateMode.PERSISTENT;
             if ((args[1].equals("-e") && args[2].equals("-s"))
                     || (args[1]).equals("-s") && (args[2].equals("-e"))) {
                 first+=2;
                 flags = CreateMode.EPHEMERAL_SEQUENTIAL;
+            } else if ((args[1].equals("-c") && args[2].equals("-s"))
+                    || (args[1]).equals("-s") && (args[2].equals("-c"))) {
+                first+=2;
+                flags = CreateMode.EPHEMERAL_SEQUENTIAL_CONTAINER;
             } else if (args[1].equals("-e")) {
                 first++;
                 flags = CreateMode.EPHEMERAL;
             } else if (args[1].equals("-s")) {
                 first++;
                 flags = CreateMode.PERSISTENT_SEQUENTIAL;
+            } else if (args[1].equals("-c")) {
+                first++;
+                flags = CreateMode.EPHEMERAL_CONTAINER;
+            }
+            if (args.length == first + 3) {
+                payload = args[first+2].getBytes();
             }
             if (args.length == first + 4) {
                 acl = parseACLs(args[first+3]);
             }
             path = args[first + 1];
-            String newPath = zk.create(path, args[first+2].getBytes(), acl,
-                    flags);
+            String newPath = zk.create(path, payload, acl, flags);
             System.err.println("Created " + newPath);
         } else if (cmd.equals("delete") && args.length >= 2) {
             path = args[1];
