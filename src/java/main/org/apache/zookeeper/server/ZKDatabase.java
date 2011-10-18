@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.NoNodeException;
 import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.Watcher.WatcherType;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.server.DataTree.ProcessTxnResult;
@@ -374,6 +375,16 @@ public class ZKDatabase {
     public void setWatches(long relativeZxid, List<String> dataWatches,
             List<String> existWatches, List<String> childWatches, Watcher watcher) {
         dataTree.setWatches(relativeZxid, dataWatches, existWatches, childWatches, watcher);
+    }
+
+    /**
+     * remove watch from the datatree
+     * @param path node to remove watches from
+     * @param type the type of watcher to remove
+     * @param watcher the watcher function to remove
+     */
+    public void removeWatch(String path, WatcherType type, Watcher watcher) {
+        dataTree.removeWatch(path, type, watcher);
     }
 
     /**

@@ -21,7 +21,6 @@ package org.apache.zookeeper.server;
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,40 +30,40 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.jute.Record;
 import org.apache.jute.BinaryOutputArchive;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.jute.Record;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.MultiTransactionRecord;
 import org.apache.zookeeper.Op;
 import org.apache.zookeeper.ZooDefs;
-import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.common.PathUtils;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.data.StatPersisted;
+import org.apache.zookeeper.proto.CheckVersionRequest;
 import org.apache.zookeeper.proto.CreateRequest;
 import org.apache.zookeeper.proto.DeleteRequest;
+import org.apache.zookeeper.proto.RemoveWatches;
 import org.apache.zookeeper.proto.SetACLRequest;
 import org.apache.zookeeper.proto.SetDataRequest;
-import org.apache.zookeeper.proto.CheckVersionRequest;
 import org.apache.zookeeper.server.ZooKeeperServer.ChangeRecord;
 import org.apache.zookeeper.server.auth.AuthenticationProvider;
 import org.apache.zookeeper.server.auth.ProviderRegistry;
+import org.apache.zookeeper.txn.CheckVersionTxn;
 import org.apache.zookeeper.txn.CreateSessionTxn;
 import org.apache.zookeeper.txn.CreateTxn;
 import org.apache.zookeeper.txn.DeleteTxn;
 import org.apache.zookeeper.txn.ErrorTxn;
+import org.apache.zookeeper.txn.MultiTxn;
 import org.apache.zookeeper.txn.SetACLTxn;
 import org.apache.zookeeper.txn.SetDataTxn;
-import org.apache.zookeeper.txn.CheckVersionTxn;
 import org.apache.zookeeper.txn.Txn;
-import org.apache.zookeeper.txn.MultiTxn;
 import org.apache.zookeeper.txn.TxnHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This request processor is generally at the start of a RequestProcessor
@@ -587,6 +586,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
             case OpCode.getChildren2:
             case OpCode.ping:
             case OpCode.setWatches:
+            case OpCode.removeWatches:
                 zks.sessionTracker.checkSession(request.sessionId,
                         request.getOwner());
                 break;

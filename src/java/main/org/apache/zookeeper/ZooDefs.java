@@ -54,6 +54,8 @@ public class ZooDefs {
 
         public final int multi = 14;
 
+        public final int removeWatches = 15;
+
         public final int auth = 100;
 
         public final int setWatches = 101;

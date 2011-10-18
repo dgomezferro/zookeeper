@@ -18,6 +18,8 @@
 
 package org.apache.zookeeper;
 
+import java.util.EnumSet;
+
 /**
  * This interface specifies the public interface an event handler class must
  * implement. A ZooKeeper client will get various events from the ZooKeepr
@@ -143,6 +145,11 @@ public interface Watcher {
                 }
             }           
         }
+    }
+    
+    public enum WatcherType {
+        Children,
+        Data,
     }
 
     abstract public void process(WatchedEvent event);

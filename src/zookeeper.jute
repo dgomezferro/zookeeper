@@ -84,7 +84,11 @@ module org.apache.zookeeper.proto {
         vector<ustring>dataWatches;
         vector<ustring>existWatches;
         vector<ustring>childWatches;
-    }        
+    }
+    class RemoveWatches {
+    	ustring path;
+    	int type;
+    }
     class RequestHeader {
         int xid;
         int type;
@@ -156,6 +160,10 @@ module org.apache.zookeeper.proto {
     class SetMaxChildrenRequest {
         ustring path;
         int max;
+    }
+    class RemoveWatchesRequest {
+    	ustring path;
+    	int type;
     }
     class SyncRequest {
         ustring path;

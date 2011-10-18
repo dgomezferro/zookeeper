@@ -53,6 +53,7 @@ import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
 import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.ZooKeeper.States;
+import org.apache.zookeeper.ZooKeeper.WatchDeregistration;
 import org.apache.zookeeper.ZooKeeper.WatchRegistration;
 import org.apache.zookeeper.client.HostProvider;
 import org.apache.zookeeper.client.ZooKeeperSaslClient;
@@ -64,6 +65,7 @@ import org.apache.zookeeper.proto.GetACLResponse;
 import org.apache.zookeeper.proto.GetChildren2Response;
 import org.apache.zookeeper.proto.GetChildrenResponse;
 import org.apache.zookeeper.proto.GetDataResponse;
+import org.apache.zookeeper.proto.RemoveWatchesRequest;
 import org.apache.zookeeper.proto.ReplyHeader;
 import org.apache.zookeeper.proto.RequestHeader;
 import org.apache.zookeeper.proto.SetACLResponse;
@@ -250,6 +252,8 @@ public class ClientCnxn {
         Object ctx;
 
         WatchRegistration watchRegistration;
+        
+        WatchDeregistration watchDeregistration;
 
         /** Convenience ctor */
         Packet(RequestHeader requestHeader, ReplyHeader replyHeader,
@@ -628,6 +632,9 @@ public class ClientCnxn {
     private void finishPacket(Packet p) {
         if (p.watchRegistration != null) {
             p.watchRegistration.register(p.replyHeader.getErr());
+        }
+        if (p.watchDeregistration != null) {
+            p.watchDeregistration.unregister(p.replyHeader.getErr());
         }
 
         if (p.cb == null) {
@@ -1250,10 +1257,16 @@ public class ClientCnxn {
 
     public ReplyHeader submitRequest(RequestHeader h, Record request,
             Record response, WatchRegistration watchRegistration)
+            throws InterruptedException  {
+        return submitRequest(h, request, response, watchRegistration, null);
+    }
+
+    public ReplyHeader submitRequest(RequestHeader h, Record request,
+            Record response, WatchRegistration watchRegistration, WatchDeregistration watchDeregistration)
             throws InterruptedException {
         ReplyHeader r = new ReplyHeader();
         Packet packet = queuePacket(h, r, request, response, null, null, null,
-                    null, watchRegistration);
+                    null, watchRegistration, watchDeregistration);
         synchronized (packet) {
             while (!packet.finished) {
                 packet.wait();
@@ -1266,6 +1279,14 @@ public class ClientCnxn {
             Record response, AsyncCallback cb, String clientPath,
             String serverPath, Object ctx, WatchRegistration watchRegistration)
     {
+        return queuePacket(h, r, request, response, cb, clientPath, serverPath, ctx, watchRegistration, null);
+    }
+
+    Packet queuePacket(RequestHeader h, ReplyHeader r, Record request,
+            Record response, AsyncCallback cb, String clientPath,
+            String serverPath, Object ctx, WatchRegistration watchRegistration,
+            WatchDeregistration watchDeregistration)
+    {
         Packet packet = null;
         synchronized (outgoingQueue) {
             if (h.getType() != OpCode.ping && h.getType() != OpCode.auth) {
@@ -1276,6 +1297,7 @@ public class ClientCnxn {
             packet.ctx = ctx;
             packet.clientPath = clientPath;
             packet.serverPath = serverPath;
+            packet.watchDeregistration = watchDeregistration;
             if (!state.isAlive() || closing) {
                 conLossPacket(packet);
             } else {

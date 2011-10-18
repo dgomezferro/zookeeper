@@ -48,6 +48,7 @@ import org.apache.zookeeper.KeeperException.NoNodeException;
 import org.apache.zookeeper.Watcher.Event;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
+import org.apache.zookeeper.Watcher.WatcherType;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.common.PathTrie;
@@ -1291,6 +1292,17 @@ public class DataTree {
                 node.stat.setCversion(newCversion);
                 node.stat.setPzxid(zxid);
             }
+        }
+    }
+
+    public void removeWatch(String path, WatcherType type, Watcher watcher) {
+        switch (type) {
+        case Children:
+            this.childWatches.removeWatcher(path, watcher);
+            break;
+        case Data:
+            this.dataWatches.removeWatcher(path, watcher);
+            break;
         }
     }
 }

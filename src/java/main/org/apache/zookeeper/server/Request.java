@@ -115,6 +115,7 @@ public class Request {
         case OpCode.ping:
         case OpCode.closeSession:
         case OpCode.setWatches:
+        case OpCode.removeWatches:
             return true;
         default:
             return false;

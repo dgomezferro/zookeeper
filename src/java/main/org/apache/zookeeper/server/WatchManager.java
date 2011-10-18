@@ -88,6 +88,22 @@ public class WatchManager {
         }
     }
 
+    public synchronized void removeWatcher(String path, Watcher watcher) {
+        HashSet<String> paths = watch2Paths.get(watcher);
+        if (paths == null) {
+            return;
+        }
+        paths.remove(path);
+        HashSet<Watcher> list = watchTable.get(path);
+        if (list == null) {
+            return;
+        }
+        list.remove(watcher);
+        if (list.size() == 0) {
+            watchTable.remove(path);
+        }
+    }
+
     public Set<Watcher> triggerWatch(String path, EventType type) {
         return triggerWatch(path, type, null);
     }

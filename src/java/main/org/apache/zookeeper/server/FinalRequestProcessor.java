@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.MultiResponse;
+import org.apache.zookeeper.Watcher.WatcherType;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.KeeperException.SessionMovedException;
@@ -44,6 +45,8 @@ import org.apache.zookeeper.proto.GetChildrenRequest;
 import org.apache.zookeeper.proto.GetChildrenResponse;
 import org.apache.zookeeper.proto.GetDataRequest;
 import org.apache.zookeeper.proto.GetDataResponse;
+import org.apache.zookeeper.proto.RemoveWatches;
+import org.apache.zookeeper.proto.RemoveWatchesRequest;
 import org.apache.zookeeper.proto.ReplyHeader;
 import org.apache.zookeeper.proto.SetACLResponse;
 import org.apache.zookeeper.proto.SetDataResponse;
@@ -61,6 +64,8 @@ import org.apache.zookeeper.OpResult.CreateResult;
 import org.apache.zookeeper.OpResult.DeleteResult;
 import org.apache.zookeeper.OpResult.SetDataResult;
 import org.apache.zookeeper.OpResult.ErrorResult;
+
+import com.sun.xml.internal.ws.org.objectweb.asm.Opcodes;
 
 /**
  * This Request processor actually applies any transaction associated with a
@@ -312,6 +317,14 @@ public class FinalRequestProcessor implements RequestProcessor {
                         setWatches.getDataWatches(), 
                         setWatches.getExistWatches(),
                         setWatches.getChildWatches(), cnxn);
+                break;
+            }
+            case OpCode.removeWatches: {
+                lastOp = "REMW";
+                RemoveWatches removeWatches = new RemoveWatches();
+                ByteBufferInputStream.byteBuffer2Record(request.request, removeWatches);
+                WatcherType type = WatcherType.values()[removeWatches.getType()];
+                zks.getZKDatabase().removeWatch(removeWatches.getPath(), type, cnxn);
                 break;
             }
             case OpCode.getACL: {
