@@ -32,41 +32,44 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.apache.jute.Record;
 import org.apache.jute.BinaryOutputArchive;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.jute.Record;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
+import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.MultiTransactionRecord;
 import org.apache.zookeeper.Op;
 import org.apache.zookeeper.ZooDefs;
-import org.apache.zookeeper.KeeperException.Code;
 import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.common.PathUtils;
 import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.data.StatPersisted;
+import org.apache.zookeeper.proto.CheckVersionRequest;
 import org.apache.zookeeper.proto.CreateRequest;
 import org.apache.zookeeper.proto.DeleteRequest;
 import org.apache.zookeeper.proto.SetACLRequest;
 import org.apache.zookeeper.proto.SetDataRequest;
-import org.apache.zookeeper.proto.CheckVersionRequest;
 import org.apache.zookeeper.server.ZooKeeperServer.ChangeRecord;
 import org.apache.zookeeper.server.auth.AuthenticationProvider;
 import org.apache.zookeeper.server.auth.ProviderRegistry;
 import org.apache.zookeeper.server.quorum.Leader.XidRolloverException;
+import org.apache.zookeeper.txn.CheckVersionTxn;
 import org.apache.zookeeper.txn.CreateSessionTxn;
 import org.apache.zookeeper.txn.CreateTxn;
 import org.apache.zookeeper.txn.DeleteTxn;
 import org.apache.zookeeper.txn.ErrorTxn;
+import org.apache.zookeeper.txn.MultiTxn;
 import org.apache.zookeeper.txn.SetACLTxn;
 import org.apache.zookeeper.txn.SetDataTxn;
-import org.apache.zookeeper.txn.CheckVersionTxn;
 import org.apache.zookeeper.txn.Txn;
-import org.apache.zookeeper.txn.MultiTxn;
 import org.apache.zookeeper.txn.TxnHeader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.MessageHandler;
+import com.yahoo.aasc.ReadOnly;
 
 /**
  * This request processor is generally at the start of a RequestProcessor
@@ -75,7 +78,9 @@ import org.apache.zookeeper.txn.TxnHeader;
  * outstandingRequests, so that it can take into account transactions that are
  * in the queue to be applied when generating a transaction.
  */
+@Introspect
 public class PrepRequestProcessor extends Thread implements RequestProcessor {
+    @ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(PrepRequestProcessor.class);
 
     static boolean skipACL;
@@ -94,6 +99,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
 
     LinkedBlockingQueue<Request> submittedRequests = new LinkedBlockingQueue<Request>();
 
+    @ReadOnly
     private final RequestProcessor nextProcessor;
 
     ZooKeeperServer zks;
@@ -495,6 +501,12 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
      * @param request
      */
     protected void pRequest(Request request) throws RequestProcessorException {
+        Request r = pascRequest(request);
+        nextProcessor.processRequest(r);
+    }
+
+    @MessageHandler
+    private Request pascRequest(Request request) {
         // LOG.info("Prep>>> cxid = " + request.cxid + " type = " +
         // request.type + " id = 0x" + Long.toHexString(request.sessionId));
         request.setHdr(null);
@@ -644,7 +656,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
             }
         }
         request.zxid = zks.getZxid();
-        nextProcessor.processRequest(request);
+        return request;
     }
 
     private List<ACL> removeDuplicates(List<ACL> acl) {

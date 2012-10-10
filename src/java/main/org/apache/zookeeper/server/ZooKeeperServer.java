@@ -66,13 +66,18 @@ import org.apache.zookeeper.txn.TxnHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.ReadOnly;
+
 
 /**
  * This class implements a simple standalone ZooKeeperServer. It sets up the
  * following chain of RequestProcessors to process requests:
  * PrepRequestProcessor -> SyncRequestProcessor -> FinalRequestProcessor
  */
+@Introspect
 public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
+    @ReadOnly
     protected static final Logger LOG;
 
     static {
@@ -81,7 +86,9 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         Environment.logEnv("Server environment:", LOG);
     }
 
+    @ReadOnly
     protected ZooKeeperServerBean jmxServerBean;
+    @ReadOnly
     protected DataTreeBean jmxDataTreeBean;
 
     public static final int DEFAULT_TICK_TIME = 3000;
@@ -90,11 +97,14 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     protected int minSessionTimeout = -1;
     /** value of -1 indicates unset, use default */
     protected int maxSessionTimeout = -1;
+    @ReadOnly
     protected SessionTracker sessionTracker;
+    @ReadOnly
     private FileTxnSnapLog txnLogFactory = null;
     private ZKDatabase zkDb;
     protected long hzxid = 0;
     public final static Exception ok = new Exception("No prob");
+    @ReadOnly
     protected RequestProcessor firstProcessor;
     protected volatile boolean running;
 
@@ -105,13 +115,17 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     static final private long superSecret = 0XB3415C00L;
 
     int requestsInProcess;
+    @ReadOnly
     final List<ChangeRecord> outstandingChanges = new ArrayList<ChangeRecord>();
     // this data structure must be accessed under the outstandingChanges lock
+    @ReadOnly
     final HashMap<String, ChangeRecord> outstandingChangesForPath =
         new HashMap<String, ChangeRecord>();
 
+    @ReadOnly
     private ServerCnxnFactory serverCnxnFactory;
 
+    @ReadOnly
     private final ServerStats serverStats;
 
     void removeCnxn(ServerCnxn cnxn) {
