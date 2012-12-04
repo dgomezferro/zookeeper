@@ -97,6 +97,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
      */
     private static  boolean failCreate = false;
 
+    @ReadOnly
     LinkedBlockingQueue<Request> submittedRequests = new LinkedBlockingQueue<Request>();
 
     @ReadOnly

@@ -50,12 +50,16 @@ import org.apache.zookeeper.server.quorum.QuorumPacket;
 import org.apache.zookeeper.server.util.SerializeUtils;
 import org.apache.zookeeper.txn.TxnHeader;
 
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class maintains the in memory database of zookeeper
  * server states that includes the sessions, datatree and the
  * committed logs. It is booted up  after reading the logs
  * and snapshots from the disk.
  */
+@Introspect
 public class ZKDatabase {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZKDatabase.class);
@@ -65,12 +69,16 @@ public class ZKDatabase {
      * all these members.
      */
     protected DataTree dataTree;
+    @ReadOnly
     protected ConcurrentHashMap<Long, Integer> sessionsWithTimeouts;
+    @ReadOnly
     protected FileTxnSnapLog snapLog;
     protected long minCommittedLog, maxCommittedLog;
     public static final int commitLogCount = 500;
     protected static int commitLogBuffer = 700;
+    @ReadOnly
     protected LinkedList<Proposal> committedLog = new LinkedList<Proposal>();
+    @ReadOnly
     protected ReentrantReadWriteLock logLock = new ReentrantReadWriteLock();
     volatile private boolean initialized = false;
 

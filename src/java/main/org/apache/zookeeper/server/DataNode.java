@@ -28,6 +28,9 @@ import org.apache.jute.Record;
 import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.data.StatPersisted;
 
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class contains the data for a node in the data tree.
  * <p>
@@ -35,6 +38,7 @@ import org.apache.zookeeper.data.StatPersisted;
  * array of ACLs, a stat object, and a set of its children's paths.
  * 
  */
+@Introspect
 public class DataNode implements Record {
     /** the data for this datanode */
     byte data[];
@@ -54,6 +58,7 @@ public class DataNode implements Record {
      * does not contain the parent path -- just the last part of the path. This
      * should be synchronized on except deserializing (for speed up issues).
      */
+//    @ReadOnly
     private Set<String> children = null;
 
     /**

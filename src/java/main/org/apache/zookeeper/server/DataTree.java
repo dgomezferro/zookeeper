@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -63,6 +62,9 @@ import org.apache.zookeeper.txn.TxnHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class maintains the tree data structure. It doesn't have any networking
  * or client connection code in it so that it can be tested in a stand alone
@@ -72,6 +74,7 @@ import org.slf4j.LoggerFactory;
  * full paths to DataNodes and a tree of DataNodes. All accesses to a path is
  * through the hashtable. The tree is traversed only when serializing to disk.
  */
+@Introspect
 public class DataTree {
     private static final Logger LOG = LoggerFactory.getLogger(DataTree.class);
 
@@ -113,6 +116,7 @@ public class DataTree {
     /**
      * This hashtable lists the paths of the ephemeral nodes of a session.
      */
+    @ReadOnly
     private final Map<Long, HashSet<String>> ephemerals =
         new ConcurrentHashMap<Long, HashSet<String>>();
 
@@ -120,12 +124,14 @@ public class DataTree {
      * this is map from longs to acl's. It saves acl's being stored for each
      * datanode.
      */
+    @ReadOnly
     private final Map<Long, List<ACL>> longKeyMap =
         new HashMap<Long, List<ACL>>();
 
     /**
      * this a map from acls to long.
      */
+    @ReadOnly
     private final Map<List<ACL>, Long> aclKeyMap =
         new HashMap<List<ACL>, Long>();
 

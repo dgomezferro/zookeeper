@@ -52,7 +52,6 @@ import org.apache.zookeeper.proto.SyncRequest;
 import org.apache.zookeeper.proto.SyncResponse;
 import org.apache.zookeeper.server.DataTree.ProcessTxnResult;
 import org.apache.zookeeper.server.ZooKeeperServer.ChangeRecord;
-import org.apache.zookeeper.txn.CreateSessionTxn;
 import org.apache.zookeeper.txn.ErrorTxn;
 import org.apache.zookeeper.txn.TxnHeader;
 
@@ -63,6 +62,10 @@ import org.apache.zookeeper.OpResult.DeleteResult;
 import org.apache.zookeeper.OpResult.SetDataResult;
 import org.apache.zookeeper.OpResult.ErrorResult;
 
+import com.yahoo.aasc.HandlerIO;
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.MessageHandler;
+
 /**
  * This Request processor actually applies any transaction associated with a
  * request and services any queries. It is always at the end of a
@@ -72,6 +75,7 @@ import org.apache.zookeeper.OpResult.ErrorResult;
  * This RequestProcessor counts on ZooKeeperServer to populate the
  * outstandingRequests member of ZooKeeperServer.
  */
+@Introspect
 public class FinalRequestProcessor implements RequestProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(FinalRequestProcessor.class);
 
@@ -81,7 +85,8 @@ public class FinalRequestProcessor implements RequestProcessor {
         this.zks = zks;
     }
 
-    public void processRequest(Request request) {
+    @MessageHandler
+    public Response pascProcessRequest(Request request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Processing request:: " + request);
         }
@@ -129,12 +134,12 @@ public class FinalRequestProcessor implements RequestProcessor {
                 // the session/socket here before we can send the closeSession
                 // in the switch block below
                 scxn.closeSession(request.sessionId);
-                return;
+                return null;
             }
         }
 
         if (request.cnxn == null) {
-            return;
+            return null;
         }
         ServerCnxn cnxn = request.cnxn;
 
@@ -164,9 +169,8 @@ public class FinalRequestProcessor implements RequestProcessor {
                 cnxn.updateStatsForResponse(request.cxid, request.zxid, lastOp,
                         request.createTime, System.currentTimeMillis());
 
-                cnxn.sendResponse(new ReplyHeader(-2,
+                return new Response(new ReplyHeader(-2,
                         zks.getZKDatabase().getDataTreeLastProcessedZxid(), 0), null, "response");
-                return;
             }
             case OpCode.createSession: {
                 zks.serverStats().updateLatency(request.createTime);
@@ -176,7 +180,7 @@ public class FinalRequestProcessor implements RequestProcessor {
                         request.createTime, System.currentTimeMillis());
 
                 zks.finishSessionInit(request.cnxn, true);
-                return;
+                return null;
             }
             case OpCode.multi: {
                 lastOp = "MULT";
@@ -370,8 +374,8 @@ public class FinalRequestProcessor implements RequestProcessor {
             // successfully fwd/processed by the leader and as a result
             // the client and leader disagree on where the client is most
             // recently attached (and therefore invalid SESSION MOVED generated)
-            cnxn.sendCloseSession();
-            return;
+//            cnxn.sendCloseSession();
+            return Response.CLOSE_SESSION;
         } catch (KeeperException e) {
             err = e.code();
         } catch (Exception e) {
@@ -396,13 +400,26 @@ public class FinalRequestProcessor implements RequestProcessor {
         cnxn.updateStatsForResponse(request.cxid, lastZxid, lastOp,
                     request.createTime, System.currentTimeMillis());
 
-        try {
-            cnxn.sendResponse(hdr, rsp, "response");
-            if (request.type == OpCode.closeSession) {
-                cnxn.sendCloseSession();
+        return new Response(hdr, rsp, "response");
+    }
+
+    public void processRequest(Request request) {
+        Response response = pascProcessRequest(request);
+        ServerCnxn cnxn = request.cnxn;
+        
+        if (response == null) {
+            return;
+        } else if (response == Response.CLOSE_SESSION) {
+            cnxn.sendCloseSession();
+        } else {
+            try {
+                cnxn.sendResponse(response.header, response.record, response.tag);
+                if (request.type == OpCode.closeSession) {
+                    cnxn.sendCloseSession();
+                }
+            } catch (IOException e) {
+                LOG.error("FIXMSG",e);
             }
-        } catch (IOException e) {
-            LOG.error("FIXMSG",e);
         }
     }
 
@@ -411,4 +428,22 @@ public class FinalRequestProcessor implements RequestProcessor {
         LOG.info("shutdown of request processor complete");
     }
 
+    @Introspect
+    private static class Response extends HandlerIO {
+        ReplyHeader header;
+        Record record;
+        String tag;
+        
+        public Response(ReplyHeader header, Record record, String tag) {
+            super();
+            this.header = header;
+            this.record = record;
+            this.tag = tag;
+        }
+        
+        public Response() {
+        }
+        
+        static Response CLOSE_SESSION = new Response();
+    }
 }
