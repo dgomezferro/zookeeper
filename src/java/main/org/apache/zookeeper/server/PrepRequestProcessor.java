@@ -510,6 +510,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
     private Request pascRequest(Request request) {
         // LOG.info("Prep>>> cxid = " + request.cxid + " type = " +
         // request.type + " id = 0x" + Long.toHexString(request.sessionId));
+        LOG.warn("We are here here");
         request.setHdr(null);
         request.setTxn(null);
 
