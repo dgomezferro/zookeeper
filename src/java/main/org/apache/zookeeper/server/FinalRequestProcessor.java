@@ -65,6 +65,7 @@ import org.apache.zookeeper.OpResult.ErrorResult;
 import com.yahoo.aasc.HandlerIO;
 import com.yahoo.aasc.Introspect;
 import com.yahoo.aasc.MessageHandler;
+import com.yahoo.aasc.ReadOnly;
 
 /**
  * This Request processor actually applies any transaction associated with a
@@ -77,6 +78,7 @@ import com.yahoo.aasc.MessageHandler;
  */
 @Introspect
 public class FinalRequestProcessor implements RequestProcessor {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(FinalRequestProcessor.class);
 
     ZooKeeperServer zks;
@@ -85,7 +87,7 @@ public class FinalRequestProcessor implements RequestProcessor {
         this.zks = zks;
     }
 
-    @MessageHandler
+//    @MessageHandler
     public Response pascProcessRequest(Request request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Processing request:: " + request);
