@@ -67,6 +67,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.OutputMethod;
 import com.yahoo.aasc.ReadOnly;
 
 
@@ -550,6 +551,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         }
     }
 
+    @OutputMethod
     public void finishSessionInit(ServerCnxn cnxn, boolean valid) {
         // register with JMX
         try {

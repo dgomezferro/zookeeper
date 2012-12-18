@@ -87,7 +87,7 @@ public class FinalRequestProcessor implements RequestProcessor {
         this.zks = zks;
     }
 
-//    @MessageHandler
+    @MessageHandler
     public Response pascProcessRequest(Request request) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Processing request:: " + request);

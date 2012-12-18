@@ -58,7 +58,6 @@ public class DataNode implements Record {
      * does not contain the parent path -- just the last part of the path. This
      * should be synchronized on except deserializing (for speed up issues).
      */
-//    @ReadOnly
     private Set<String> children = null;
 
     /**

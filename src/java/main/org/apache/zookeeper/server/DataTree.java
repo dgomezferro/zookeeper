@@ -76,6 +76,7 @@ import com.yahoo.aasc.ReadOnly;
  */
 @Introspect
 public class DataTree {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(DataTree.class);
 
     /**

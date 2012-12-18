@@ -506,7 +506,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
         nextProcessor.processRequest(r);
     }
 
-    @MessageHandler
+//    @MessageHandler
     private Request pascRequest(Request request) {
         // LOG.info("Prep>>> cxid = " + request.cxid + " type = " +
         // request.type + " id = 0x" + Long.toHexString(request.sessionId));
