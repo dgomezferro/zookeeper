@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.security.sasl.SaslException;
 
@@ -86,6 +88,9 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
 
         Environment.logEnv("Server environment:", LOG);
     }
+
+    @ReadOnly
+    Lock lock = new ReentrantLock();
 
     @ReadOnly
     protected ZooKeeperServerBean jmxServerBean;

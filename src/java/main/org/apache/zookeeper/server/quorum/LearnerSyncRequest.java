@@ -24,7 +24,12 @@ import java.util.List;
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.server.Request;
 
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.ReadOnly;
+
+@Introspect
 public class LearnerSyncRequest extends Request {
+    @ReadOnly
 	LearnerHandler fh;
 	public LearnerSyncRequest(LearnerHandler fh, long sessionId, int xid, int type,
 			ByteBuffer bb, List<Id> authInfo) {

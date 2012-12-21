@@ -406,7 +406,13 @@ public class FinalRequestProcessor implements RequestProcessor {
     }
 
     public void processRequest(Request request) {
-        Response response = pascProcessRequest(request);
+        Response response;
+        zks.lock.lock();
+        try {
+            response = pascProcessRequest(request);
+        } finally {
+            zks.lock.unlock();
+        }
         ServerCnxn cnxn = request.cnxn;
         
         if (response == null) {

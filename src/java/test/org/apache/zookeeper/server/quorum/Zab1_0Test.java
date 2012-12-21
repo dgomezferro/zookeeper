@@ -491,7 +491,6 @@ public class Zab1_0Test {
     @Test
     public void testUnnecessarySnap() throws Exception {
         testPopulatedLeaderConversation(new PopulatedLeaderConversation() {
-           @Override
            public void converseWithLeader(InputArchive ia, OutputArchive oa,
                     Leader l, long zxid) throws Exception {
                
@@ -531,7 +530,6 @@ public class Zab1_0Test {
     @Test
     public void testNormalFollowerRun() throws Exception {
         testFollowerConversation(new FollowerConversation() {
-            @Override
             public void converseWithFollower(InputArchive ia, OutputArchive oa,
                     Follower f) throws Exception {
                 File tmpDir = File.createTempFile("test", "dir");
@@ -613,7 +611,6 @@ public class Zab1_0Test {
                                 wait();
                             }
                         }
-                        @Override
                         public void process(WatchedEvent event) {
                             if (event.getType() == EventType.NodeDataChanged) {
                                 synchronized(this) {
@@ -681,7 +678,6 @@ public class Zab1_0Test {
     @Test
     public void testNormalFollowerRunWithDiff() throws Exception {
         testFollowerConversation(new FollowerConversation() {
-            @Override
             public void converseWithFollower(InputArchive ia, OutputArchive oa,
                     Follower f) throws Exception {
                 File tmpDir = File.createTempFile("test", "dir");

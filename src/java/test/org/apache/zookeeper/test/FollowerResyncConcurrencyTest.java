@@ -191,12 +191,10 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
 
         zk1.create("/first", new byte[0], ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
         Thread mytestfooThread = new Thread(new Runnable() {
-            @Override
             public void run() {
                 for(int i = 0; i < 3000; i++) {
                     zk3.create("/mytestfoo", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL, new AsyncCallback.StringCallback() {
 
-                        @Override
                         public void processResult(int rc, String path, Object ctx, String name) {
                             counter++;
                             if(counter == 16200){
@@ -219,7 +217,6 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
         for(int i = 0; i < 13000; i++) {
             zk3.create("/mybar", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL, new AsyncCallback.StringCallback() {
 
-                @Override
                 public void processResult(int rc, String path, Object ctx, String name) {
                     counter++;
                     if(counter == 16200){
@@ -248,7 +245,6 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
 
             if(i%50 == 0) {
                 zk2.create("/newbaz", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL, new AsyncCallback.StringCallback() {
-                    @Override
                     public void processResult(int rc, String path, Object ctx, String name) {
                         counter++;
                         if(counter == 16200){
@@ -344,14 +340,12 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
         final AtomicBoolean runNow = new AtomicBoolean(false);
         Thread mytestfooThread = new Thread(new Runnable() {
 
-            @Override
             public void run() {
                 int inSyncCounter = 0;
                 while(inSyncCounter < 400) {
                     if(runNow.get()) {
                         zk3.create("/mytestfoo", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL, new AsyncCallback.StringCallback() {
 
-                            @Override
                             public void processResult(int rc, String path, Object ctx, String name) {
                                 counter++;
                                 if(counter > 7300){
@@ -377,7 +371,6 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
         for(int i = 0; i < 5000; i++) {
             zk2.create("/mybar", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL, new AsyncCallback.StringCallback() {
 
-                @Override
                 public void processResult(int rc, String path, Object ctx, String name) {
                     counter++;
                     if(counter > 7300){
@@ -405,7 +398,6 @@ public class FollowerResyncConcurrencyTest extends ZKTestCase {
             if(i>=1000 &&  i%2== 0) {
                 zk3.create("/newbaz", null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL, new AsyncCallback.StringCallback() {
 
-                    @Override
                     public void processResult(int rc, String path, Object ctx, String name) {
                         counter++;
                         if(counter > 7300){

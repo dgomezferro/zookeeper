@@ -242,7 +242,6 @@ public class FileSnap implements SnapShot {
      * the close operation will block and will wait till serialize
      * is done and will set the close flag
      */
-    @Override
     public synchronized void close() throws IOException {
         close = true;
     }

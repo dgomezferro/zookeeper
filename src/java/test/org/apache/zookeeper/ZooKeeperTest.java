@@ -118,7 +118,6 @@ public class ZooKeeperTest extends ClientBase {
 
         VoidCallback cb = new VoidCallback() {
 
-            @Override
             public void processResult(int rc, String path, Object ctx) {
                 synchronized (ctx) {
                     ((AtomicInteger) ctx).set(4);

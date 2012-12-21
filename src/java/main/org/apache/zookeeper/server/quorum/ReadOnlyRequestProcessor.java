@@ -111,14 +111,12 @@ public class ReadOnlyRequestProcessor extends Thread implements RequestProcessor
         LOG.info("ReadOnlyRequestProcessor exited loop!");
     }
 
-    @Override
     public void processRequest(Request request) {
         if (!finished) {
             queuedRequests.add(request);
         }
     }
 
-    @Override
     public void shutdown() {
         finished = true;
         queuedRequests.clear();

@@ -475,7 +475,6 @@ public class MultiTransactionTest extends ClientBase {
     private static class HasTriggeredWatcher implements Watcher {
         private final CountDownLatch triggered = new CountDownLatch(1);
 
-        @Override
         public void process(WatchedEvent event) {
             triggered.countDown();
         }
@@ -483,7 +482,6 @@ public class MultiTransactionTest extends ClientBase {
     private static class SyncCallback implements AsyncCallback.VoidCallback {
         private final CountDownLatch done = new CountDownLatch(1);
 
-        @Override
         public void processResult(int rc, String path, Object ctx) {
             done.countDown();
         }
