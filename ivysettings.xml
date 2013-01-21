@@ -17,7 +17,7 @@
    limitations under the License.
 -->
 
-  <property name="maven.repo.dir" value="/Users/daniel/.m2/repository/"/>
+  <property name="maven.repo.dir" value="${user.home}/.m2/repository/"/>
   <property name="repo.maven.org"
     value="http://repo1.maven.org/maven2/" override="false"/>
   <property name="repo.jboss.org"
