@@ -332,6 +332,7 @@
     
     <target name="build-generated" depends="compile_jute,version-info" >
         <iajc sourceRoots="${src_generated.dir}" destdir="${build.classes}"
+aspectPath="build/lib/AASC-0.0.1-SNAPSHOT.jar"
             source="${javac.source}" debug="on">
             <classpath refid="java.classpath"/>
         </iajc>
@@ -384,6 +385,7 @@
 
     <target name="compile" depends="ivy-retrieve,clover,build-generated">
         <iajc sourceRoots="${java.src.dir}" destdir="${build.classes}" 
+aspectPath="build/lib/AASC-0.0.1-SNAPSHOT.jar"
                source="${javac.source}" debug="on">
             <classpath refid="java.classpath"/>
         </iajc>
@@ -392,10 +394,12 @@
     <target name="compile-test" depends="ivy-retrieve-test,compile">
       <mkdir dir="${test.java.classes}"/>
       <iajc sourceRoots="${test.src.dir}" destdir="${test.java.classes}"
+aspectPath="build/lib/AASC-0.0.1-SNAPSHOT.jar"
              source="${javac.source}" debug="on">
         <classpath refid="test.java.classpath"/>
       </iajc>
       <iajc sourceRoots="${systest.src.dir}" destdir="${test.java.classes}"
+aspectPath="build/lib/AASC-0.0.1-SNAPSHOT.jar"
              source="${javac.source}" debug="on">
         <classpath refid="test.java.classpath"/>
       </iajc>
