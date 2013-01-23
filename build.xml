@@ -18,13 +18,6 @@
 -->
 
 <project name="ZooKeeper" default="jar" xmlns:ivy="antlib:org.apache.ivy.ant">
-    <taskdef
-        resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
-        <classpath>
-            <pathelement location="${basedir}/lib/aspectjtools.jar"/>
-            <pathelement location="${basedir}/lib/aspectjrt.jar"/>
-        </classpath>
-    </taskdef>
 
     <property name="Name" value="ZooKeeper" />
     <property name="name" value="zookeeper" />
@@ -331,6 +324,13 @@
     </target>
     
     <target name="build-generated" depends="compile_jute,version-info" >
+    <taskdef
+        resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties">
+        <classpath>
+            <pathelement location="${basedir}/build/lib/aspectjtools-1.6.11.jar"/>
+            <pathelement location="${basedir}/build/lib/aspectjrt-1.6.11.jar"/>
+        </classpath>
+    </taskdef>
         <iajc sourceRoots="${src_generated.dir}" destdir="${build.classes}"
 aspectPath="build/lib/AASC-0.0.1-SNAPSHOT.jar"
             source="${javac.source}" debug="on">

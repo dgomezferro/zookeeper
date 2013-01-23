@@ -47,6 +47,7 @@
     <dependency org="log4j" name="log4j" rev="1.2.16" transitive="false" conf="default"/>
     <dependency org="jline" name="jline" rev="0.9.94" transitive="false" conf="default"/>
     <dependency org="org.aspectj" name="aspectjrt" rev="1.6.11" transitive="false" conf="default"/>
+    <dependency org="org.aspectj" name="aspectjtools" rev="1.6.11" transitive="false" conf="default"/>
     <dependency org="AASC" name="AASC" rev="0.0.1-SNAPSHOT" transitive="false" conf="default"/>
     <dependency org="com.esotericsoftware.reflectasm" name="reflectasm" rev="1.07" transitive="true" conf="default"/>
     <dependency org="it.unimi.dsi" name="fastutil" rev="6.4.6" transitive="true" conf="default"/>
