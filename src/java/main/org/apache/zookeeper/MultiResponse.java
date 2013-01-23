@@ -44,6 +44,7 @@ public class MultiResponse implements Record, Iterable<OpResult> {
         results.add(x);
     }
 
+    @Override
     public Iterator<OpResult> iterator() {
         return results.iterator();
     }
@@ -52,6 +53,7 @@ public class MultiResponse implements Record, Iterable<OpResult> {
         return results.size();
     }
 
+    @Override
     public void serialize(OutputArchive archive, String tag) throws IOException {
         archive.startRecord(this, tag);
 
@@ -81,6 +83,7 @@ public class MultiResponse implements Record, Iterable<OpResult> {
         archive.endRecord(this, tag);
     }
 
+    @Override
     public void deserialize(InputArchive archive, String tag) throws IOException {
         results = new ArrayList<OpResult>();
 

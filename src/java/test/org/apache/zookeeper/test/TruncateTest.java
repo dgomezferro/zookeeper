@@ -72,6 +72,7 @@ public class TruncateTest extends ZKTestCase {
     
     volatile boolean connected;
     Watcher nullWatcher = new Watcher() {
+        @Override
         public void process(WatchedEvent event) {
             connected = event.getState() == Watcher.Event.KeeperState.SyncConnected;
         }

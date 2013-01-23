@@ -46,6 +46,7 @@ public class MultiTransactionRecord implements Record, Iterable<Op> {
         }
     }
 
+    @Override
     public Iterator<Op> iterator() {
         return ops.iterator() ;
     }
@@ -58,6 +59,7 @@ public class MultiTransactionRecord implements Record, Iterable<Op> {
         return ops.size();
     }
 
+    @Override
     public void serialize(OutputArchive archive, String tag) throws IOException {
         archive.startRecord(this, tag);
         for (Op op : ops) {
@@ -84,6 +86,7 @@ public class MultiTransactionRecord implements Record, Iterable<Op> {
         archive.endRecord(this, tag);
     }
 
+    @Override
     public void deserialize(InputArchive archive, String tag) throws IOException {
         archive.startRecord(tag);
         MultiHeader h = new MultiHeader();

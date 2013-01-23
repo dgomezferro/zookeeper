@@ -227,6 +227,7 @@ public class InstanceContainer implements Watcher, AsyncCallback.ChildrenCallbac
 
     HashMap<String, Instance> instances = new HashMap<String, Instance>();
 
+    @Override
     public void processResult(int rc, String path, Object ctx, List<String> children) {
         if (rc != KeeperException.Code.OK.intValue()) {
             // try it again
