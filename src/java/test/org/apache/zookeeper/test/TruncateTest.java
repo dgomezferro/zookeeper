@@ -46,7 +46,6 @@ import org.apache.zookeeper.txn.TxnHeader;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,7 +121,6 @@ public class TruncateTest extends ZKTestCase {
     }
 
     @Test
-    @Ignore
     public void testTruncate() throws IOException, InterruptedException, KeeperException {
         // Prime the server that is going to come in late with 50 txns
         String hostPort = "127.0.0.1:" + baseHostPort;

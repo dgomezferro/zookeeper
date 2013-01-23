@@ -171,7 +171,7 @@ public abstract class ClientBase extends ZKTestCase {
     protected TestableZooKeeper createClient(CountdownWatcher watcher, String hp)
         throws IOException, InterruptedException
     {
-        return createClient(watcher, hp, 300000);
+        return createClient(watcher, hp, CONNECTION_TIMEOUT);
     }
 
     protected TestableZooKeeper createClient(CountdownWatcher watcher,
@@ -180,7 +180,7 @@ public abstract class ClientBase extends ZKTestCase {
     {
         watcher.reset();
         TestableZooKeeper zk = new TestableZooKeeper(hp, timeout, watcher);
-        if (!watcher.clientConnected.await(3000000, TimeUnit.MILLISECONDS))
+        if (!watcher.clientConnected.await(timeout, TimeUnit.MILLISECONDS))
         {
             Assert.fail("Unable to connect to server");
         }
