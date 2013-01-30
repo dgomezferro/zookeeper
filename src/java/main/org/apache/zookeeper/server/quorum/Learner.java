@@ -476,7 +476,12 @@ public class Learner {
         self.cnxnFactory.closeAll();
         // shutdown previous zookeeper
         if (zk != null) {
-            zk.shutdown();
+        	zk.lock.lock();
+        	try {
+        		zk.shutdown();
+        	} finally {
+        		zk.lock.unlock();
+        	}
         }
     }
 }

@@ -90,7 +90,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     }
 
     @ReadOnly
-    Lock lock = new ReentrantLock();
+    public Lock lock = new ReentrantLock();
 
     @ReadOnly
     protected ZooKeeperServerBean jmxServerBean;
