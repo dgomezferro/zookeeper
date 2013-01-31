@@ -8,3 +8,8 @@ src/c/generated/
 src/java/generated/
 src/java/lib/ant-eclipse-*
 src/java/lib/ivy-*
+*.o
+*.lo
+*.la
+src/c/config*
+*.sh

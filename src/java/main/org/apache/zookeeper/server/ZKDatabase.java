@@ -69,14 +69,12 @@ public class ZKDatabase {
      * all these members.
      */
     protected DataTree dataTree;
-    @ReadOnly
     protected ConcurrentHashMap<Long, Integer> sessionsWithTimeouts;
     @ReadOnly
     protected FileTxnSnapLog snapLog;
     protected long minCommittedLog, maxCommittedLog;
     public static final int commitLogCount = 500;
     protected static int commitLogBuffer = 700;
-    @ReadOnly
     protected LinkedList<Proposal> committedLog = new LinkedList<Proposal>();
     @ReadOnly
     protected ReentrantReadWriteLock logLock = new ReentrantReadWriteLock();
