@@ -19,7 +19,6 @@
 package org.apache.zookeeper;
 
 import com.yahoo.aasc.OutputMethod;
-import com.yahoo.aasc.ReadOnlyType;
 
 /**
  * This interface specifies the public interface an event handler class must
@@ -29,7 +28,6 @@ import com.yahoo.aasc.ReadOnlyType;
  * is expected to be an instance of a class that implements Watcher interface.
  * 
  */
-@ReadOnlyType
 public interface Watcher {
 
     /**
