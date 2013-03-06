@@ -46,6 +46,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class QuorumTest extends ZKTestCase {
     private static final Logger LOG = LoggerFactory.getLogger(QuorumTest.class);
     public static final long CONNECTION_TIMEOUT = ClientTest.CONNECTION_TIMEOUT;
@@ -233,6 +235,7 @@ public class QuorumTest extends ZKTestCase {
 
     private static class DiscoWatcher implements Watcher {
         volatile boolean zkDisco = false;
+        @OutputMethod
         public void process(WatchedEvent event) {
             if (event.getState() == KeeperState.Disconnected) {
                 zkDisco = true;

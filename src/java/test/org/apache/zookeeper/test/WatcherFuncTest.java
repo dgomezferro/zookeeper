@@ -36,6 +36,8 @@ import org.apache.zookeeper.ZooDefs.Ids;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class WatcherFuncTest extends ClientBase {
     private static class SimpleWatcher implements Watcher {
         private LinkedBlockingQueue<WatchedEvent> events =
@@ -45,7 +47,7 @@ public class WatcherFuncTest extends ClientBase {
         public SimpleWatcher(CountDownLatch latch) {
             this.latch = latch;
         }
-
+        @OutputMethod
         public void process(WatchedEvent event) {
             if (event.getState() == KeeperState.SyncConnected) {
                 if (latch != null) {

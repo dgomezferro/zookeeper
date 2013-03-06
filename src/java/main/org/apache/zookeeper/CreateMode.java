@@ -21,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.KeeperException;
 
+import com.yahoo.aasc.ReadOnly;
+
 /***
  *  CreateMode value determines how the znode is created on ZooKeeper.
  */
@@ -45,6 +47,7 @@ public enum CreateMode {
      */
     EPHEMERAL_SEQUENTIAL (3, true, true);
 
+    @ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(CreateMode.class);
 
     private boolean ephemeral;

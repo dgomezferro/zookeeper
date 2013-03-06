@@ -52,6 +52,8 @@ import org.apache.zookeeper.test.ClientBase;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class CRCTest extends ZKTestCase implements Watcher {
     private static final Logger LOG = LoggerFactory.getLogger(CRCTest.class);
 
@@ -178,6 +180,7 @@ public class CRCTest extends ZKTestCase implements Watcher {
         Assert.assertTrue(cfile);
    }
 
+    @OutputMethod
     public void process(WatchedEvent event) {
         LOG.info("Event:" + event.getState() + " " + event.getType() + " " + event.getPath());
         if (event.getState() == KeeperState.SyncConnected

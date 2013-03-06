@@ -33,6 +33,8 @@ import org.apache.zookeeper.server.ZKDatabase;
 import org.apache.zookeeper.server.persistence.FileTxnSnapLog;
 import org.apache.zookeeper.txn.TxnHeader;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * Just like the standard ZooKeeperServer. We just replace the request
  * processors: FollowerRequestProcessor -> CommitProcessor ->
@@ -41,6 +43,7 @@ import org.apache.zookeeper.txn.TxnHeader;
  * A SyncRequestProcessor is also spawned off to log proposals from the leader.
  */
 public class FollowerZooKeeperServer extends LearnerZooKeeperServer {
+	@ReadOnly
     private static final Logger LOG =
         LoggerFactory.getLogger(FollowerZooKeeperServer.class);
 

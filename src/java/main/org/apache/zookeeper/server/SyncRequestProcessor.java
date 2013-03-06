@@ -27,6 +27,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 
 /**
  * This RequestProcessor logs requests to disk. It batches the requests to do
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
  * until its log has been synced to disk.
  */
 public class SyncRequestProcessor extends Thread implements RequestProcessor {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(SyncRequestProcessor.class);
     private final ZooKeeperServer zks;
     private final LinkedBlockingQueue<Request> queuedRequests =
@@ -164,6 +167,7 @@ public class SyncRequestProcessor extends Thread implements RequestProcessor {
         zks.getZKDatabase().commit();
         while (!toFlush.isEmpty()) {
             Request i = toFlush.remove();
+            LOG.trace("Flushing");
             nextProcessor.processRequest(i);
         }
         if (nextProcessor instanceof Flushable) {

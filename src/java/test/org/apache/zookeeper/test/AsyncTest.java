@@ -45,6 +45,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class AsyncTest extends ZKTestCase
     implements StringCallback, VoidCallback, DataCallback
 {
@@ -66,7 +68,8 @@ public class AsyncTest extends ZKTestCase
     private static class CountdownWatcher implements Watcher {
         volatile CountDownLatch clientConnected = new CountDownLatch(1);
 
-        public void process(WatchedEvent event) {
+       @OutputMethod
+       public void process(WatchedEvent event) {
             if (event.getState() == KeeperState.SyncConnected) {
                 clientConnected.countDown();
             }

@@ -24,12 +24,15 @@ import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.server.Request;
 import org.apache.zookeeper.server.RequestProcessor;
 
+import com.yahoo.aasc.ReadOnly;
+
 
 /**
  * This is a very simple RequestProcessor that simply forwards a request from a
  * previous stage to the leader as an ACK.
  */
 class AckRequestProcessor implements RequestProcessor {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(AckRequestProcessor.class);
     Leader leader;
 

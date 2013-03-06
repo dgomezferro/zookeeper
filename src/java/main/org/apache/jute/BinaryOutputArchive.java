@@ -26,6 +26,8 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.TreeMap;
 
+//import com.yahoo.aasc.OutputMethod;
+
 /**
  *
  */
@@ -119,6 +121,7 @@ public class BinaryOutputArchive implements OutputArchive {
         out.write(barr);
     }
     
+//    @OutputMethod
     public void writeRecord(Record r, String tag) throws IOException {
         r.serialize(this, tag);
     }

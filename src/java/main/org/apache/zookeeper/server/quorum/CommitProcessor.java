@@ -27,6 +27,8 @@ import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.server.Request;
 import org.apache.zookeeper.server.RequestProcessor;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This RequestProcessor matches the incoming committed requests with the
  * locally submitted requests. The trick is that locally submitted requests that
@@ -34,6 +36,7 @@ import org.apache.zookeeper.server.RequestProcessor;
  * so we need to match them up.
  */
 public class CommitProcessor extends Thread implements RequestProcessor {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(CommitProcessor.class);
 
     /**

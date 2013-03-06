@@ -58,11 +58,14 @@ import org.apache.zookeeper.cli.SetQuotaCommand;
 import org.apache.zookeeper.cli.StatCommand;
 import org.apache.zookeeper.cli.SyncCommand;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * The command line client to ZooKeeper.
  *
  */
 public class ZooKeeperMain {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ZooKeeperMain.class);
     protected static final Map<String,String> commandMap = new HashMap<String,String>( );
     protected static final Map<String,CliCommand> commandMapCli = 

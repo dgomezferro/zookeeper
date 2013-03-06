@@ -43,6 +43,8 @@ import org.apache.zookeeper.server.ZooKeeperServer;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class ACLTest extends ZKTestCase implements Watcher {
     private static final Logger LOG = LoggerFactory.getLogger(ACLTest.class);
     private static final String HOSTPORT =
@@ -170,6 +172,7 @@ public class ACLTest extends ZKTestCase implements Watcher {
      *
      * @see org.apache.zookeeper.Watcher#process(org.apache.zookeeper.WatcherEvent)
      */
+    @OutputMethod
     public void process(WatchedEvent event) {
         LOG.info("Event:" + event.getState() + " " + event.getType() + " "
                  + event.getPath());

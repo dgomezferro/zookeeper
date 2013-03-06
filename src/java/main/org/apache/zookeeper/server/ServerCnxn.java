@@ -37,6 +37,8 @@ import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.proto.ReplyHeader;
 import org.apache.zookeeper.proto.RequestHeader;
 
+import com.yahoo.aasc.OutputMethod;
+
 /**
  * Interface to a Server connection - represents a connection from a client
  * to the server.
@@ -65,6 +67,7 @@ public abstract class ServerCnxn implements Stats, Watcher {
     /* notify the client the session is closing and close/cleanup socket */
     abstract void sendCloseSession();
 
+    @OutputMethod
     public abstract void process(WatchedEvent event);
 
     abstract long getSessionId();

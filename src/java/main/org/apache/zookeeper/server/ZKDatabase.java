@@ -62,6 +62,7 @@ import com.yahoo.aasc.ReadOnly;
 @Introspect
 public class ZKDatabase {
 
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ZKDatabase.class);
 
     /**

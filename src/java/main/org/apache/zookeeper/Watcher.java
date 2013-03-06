@@ -18,6 +18,9 @@
 
 package org.apache.zookeeper;
 
+import com.yahoo.aasc.OutputMethod;
+import com.yahoo.aasc.ReadOnlyType;
+
 /**
  * This interface specifies the public interface an event handler class must
  * implement. A ZooKeeper client will get various events from the ZooKeepr
@@ -26,6 +29,7 @@ package org.apache.zookeeper;
  * is expected to be an instance of a class that implements Watcher interface.
  * 
  */
+@ReadOnlyType
 public interface Watcher {
 
     /**
@@ -145,5 +149,6 @@ public interface Watcher {
         }
     }
 
+    @OutputMethod
     abstract public void process(WatchedEvent event);
 }

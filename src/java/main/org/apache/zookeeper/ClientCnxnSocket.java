@@ -32,6 +32,8 @@ import org.apache.zookeeper.server.ByteBufferInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * A ClientCnxnSocket does the lower level communication with a socket
  * implementation.
@@ -41,6 +43,7 @@ import org.slf4j.LoggerFactory;
  * 
  */
 abstract class ClientCnxnSocket {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ClientCnxnSocket.class);
 
     protected boolean initialized;

@@ -33,13 +33,20 @@ import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.KeeperException.SessionExpiredException;
 
+import com.yahoo.aasc.HandlerIO;
+import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.MessageHandler;
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This is a full featured SessionTracker. It tracks session in grouped by tick
  * interval. It always rounds up the tick interval to provide a sort of grace
  * period. Sessions are thus expired in batches made up of sessions that expire
  * in a given interval.
  */
+@Introspect
 public class SessionTrackerImpl extends Thread implements SessionTracker {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(SessionTrackerImpl.class);
 
     HashMap<Long, SessionImpl> sessionsById = new HashMap<Long, SessionImpl>();
@@ -141,25 +148,32 @@ public class SessionTrackerImpl extends Thread implements SessionTracker {
     synchronized public void run() {
         try {
             while (running) {
+            	// we don't protect this since it's only about liveness
                 currentTime = System.currentTimeMillis();
                 if (nextExpirationTime > currentTime) {
                     this.wait(nextExpirationTime - currentTime);
                     continue;
                 }
-                SessionSet set;
-                set = sessionSets.remove(nextExpirationTime);
-                if (set != null) {
-                    for (SessionImpl s : set.sessions) {
-                        setSessionClosing(s.sessionId);
-                        expirer.expire(s);
-                    }
-                }
-                nextExpirationTime += expirationInterval;
+                pascHandler();
             }
         } catch (InterruptedException e) {
             LOG.error("Unexpected interruption", e);
         }
         LOG.info("SessionTrackerImpl exited loop!");
+    }
+    
+    @MessageHandler
+    public HandlerIO pascHandler(){
+        SessionSet set;
+        set = sessionSets.remove(nextExpirationTime);
+        if (set != null) {
+            for (SessionImpl s : set.sessions) {
+                setSessionClosing(s.sessionId);
+                expirer.expire(s);
+            }
+        }
+        nextExpirationTime += expirationInterval;
+        return null;
     }
 
     synchronized public boolean touchSession(long sessionId, int timeout) {

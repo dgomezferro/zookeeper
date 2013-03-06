@@ -57,6 +57,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class LoadFromLogTest extends ZKTestCase implements  Watcher {
     private static String HOSTPORT = "127.0.0.1:" + PortAssignment.unique();
     private static final int CONNECTION_TIMEOUT = 3000;
@@ -121,6 +123,7 @@ public class LoadFromLogTest extends ZKTestCase implements  Watcher {
 
 
 
+    @OutputMethod
     public void process(WatchedEvent event) {
     	switch (event.getType()) {
     	case None:

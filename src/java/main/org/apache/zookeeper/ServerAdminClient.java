@@ -24,10 +24,14 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class ServerAdminClient {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ServerAdminClient.class);
 
     public static void ruok(String host, int port) {

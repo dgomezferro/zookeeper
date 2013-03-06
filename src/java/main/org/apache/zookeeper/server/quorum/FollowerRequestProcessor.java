@@ -28,12 +28,15 @@ import org.apache.zookeeper.server.RequestProcessor;
 import org.apache.zookeeper.server.Request;
 import org.apache.zookeeper.server.ZooTrace;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This RequestProcessor forwards any requests that modify the state of the
  * system to the Leader.
  */
 public class FollowerRequestProcessor extends Thread implements
         RequestProcessor {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(FollowerRequestProcessor.class);
 
     FollowerZooKeeperServer zks;

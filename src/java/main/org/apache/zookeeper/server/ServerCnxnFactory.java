@@ -37,14 +37,18 @@ import org.apache.zookeeper.server.auth.SaslServerCallbackHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 public abstract class ServerCnxnFactory {
 
+	@ReadOnly
     public static final String ZOOKEEPER_SERVER_CNXN_FACTORY = "zookeeper.serverCnxnFactory";
 
     public interface PacketProcessor {
         public void processPacket(ByteBuffer packet, ServerCnxn src);
     }
     
+    @ReadOnly
     Logger LOG = LoggerFactory.getLogger(ServerCnxnFactory.class);
 
     /**

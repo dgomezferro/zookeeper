@@ -52,6 +52,8 @@ import org.apache.zookeeper.server.util.ZxidUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class manages the quorum protocol. There are three states this server
  * can be in:
@@ -80,6 +82,7 @@ import org.slf4j.LoggerFactory;
  * The request for the current leader will consist solely of an xid: int xid;
  */
 public class QuorumPeer extends Thread implements QuorumStats.Provider {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(QuorumPeer.class);
 
     QuorumBean jmxQuorumBean;

@@ -26,6 +26,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /*
  * This code is originally from HDFS, see the similarly named files there
  * in case of bug fixing, history, etc...
@@ -46,6 +48,7 @@ import org.slf4j.LoggerFactory;
 public class AtomicFileOutputStream extends FilterOutputStream {
     private static final String TMP_EXTENSION = ".tmp";
 
+    @ReadOnly
     private final static Logger LOG = LoggerFactory
             .getLogger(AtomicFileOutputStream.class);
 

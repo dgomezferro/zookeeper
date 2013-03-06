@@ -131,7 +131,6 @@ public class DataTree {
     /**
      * this a map from acls to long.
      */
-    @ReadOnly
     private final Map<List<ACL>, Long> aclKeyMap =
         new HashMap<List<ACL>, Long>();
 
@@ -500,11 +499,13 @@ public class DataTree {
         String childName = path.substring(lastSlash + 1);
         DataNode node = nodes.get(path);
         if (node == null) {
+//        	LOG.trace("Stopping: node == null for path " + path);
             throw new KeeperException.NoNodeException();
         }
         nodes.remove(path);
         DataNode parent = nodes.get(parentName);
         if (parent == null) {
+//        	LOG.trace("Stopping: parent == null for path " + parentName);
             throw new KeeperException.NoNodeException();
         }
         synchronized (parent) {

@@ -35,7 +35,10 @@ import org.apache.zookeeper.server.persistence.FileTxnLog;
 import org.apache.zookeeper.server.util.SerializeUtils;
 import org.apache.zookeeper.txn.TxnHeader;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class LogFormatter {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(LogFormatter.class);
 
     /**

@@ -25,6 +25,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * a class that implements prefix matching for 
  * components of a filesystem path. the trie
@@ -44,6 +46,7 @@ public class PathTrie {
     /**
      * the logger for this class
      */
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(PathTrie.class);
     
     /**

@@ -48,6 +48,8 @@ import org.apache.zookeeper.server.util.SerializeUtils;
 import org.apache.zookeeper.server.util.ZxidUtils;
 import org.apache.zookeeper.txn.TxnHeader;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class is the superclass of two of the three main actors in a ZK
  * ensemble: Followers and Observers. Both Followers and Observers share 
@@ -78,6 +80,7 @@ public class Learner {
     /** the protocol version of the leader */
     protected int leaderProtocolVersion = 0x01;
     
+    @ReadOnly
     protected static final Logger LOG = LoggerFactory.getLogger(Learner.class);
 
     static final private boolean nodelay = System.getProperty("follower.nodelay", "true").equals("true");
@@ -476,12 +479,12 @@ public class Learner {
         self.cnxnFactory.closeAll();
         // shutdown previous zookeeper
         if (zk != null) {
-        	zk.lock.lock();
-        	try {
+//        	zk.lock.lock();
+//        	try {
         		zk.shutdown();
-        	} finally {
-        		zk.lock.unlock();
-        	}
+//        	} finally {
+//        		zk.lock.unlock();
+//        	}
         }
     }
 }

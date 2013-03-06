@@ -45,7 +45,10 @@ import org.apache.zookeeper.txn.SetDataTxn;
 import org.apache.zookeeper.txn.TxnHeader;
 import org.apache.zookeeper.txn.MultiTxn;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class SerializeUtils {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(SerializeUtils.class);
     
     public static Record deserializeTxn(byte txnBytes[], TxnHeader hdr)

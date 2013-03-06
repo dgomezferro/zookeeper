@@ -36,8 +36,11 @@ import javax.security.sasl.RealmCallback;
 
 import org.apache.zookeeper.server.ZooKeeperSaslServer;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class SaslServerCallbackHandler implements CallbackHandler {
     private static final String USER_PREFIX = "user_";
+    @ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(SaslServerCallbackHandler.class);
     private static final String SYSPROP_SUPER_PASSWORD = "zookeeper.SASLAuthenticationProvider.superPassword";
     private static final String SYSPROP_REMOVE_HOST = "zookeeper.kerberos.removeHostFromPrincipal";

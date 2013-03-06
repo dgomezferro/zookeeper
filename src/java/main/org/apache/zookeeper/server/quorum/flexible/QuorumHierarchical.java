@@ -36,6 +36,8 @@ import org.apache.zookeeper.server.quorum.QuorumPeer.LearnerType;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 
+import com.yahoo.aasc.ReadOnly;
+
 
 /**
  * This class implements a validator for hierarchical quorums. With this
@@ -67,6 +69,7 @@ import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
  */
 
 public class QuorumHierarchical implements QuorumVerifier {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(QuorumHierarchical.class);
 
     private HashMap<Long, Long> serverWeight = new HashMap<Long, Long>();

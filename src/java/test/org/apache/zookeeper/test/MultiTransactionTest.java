@@ -47,6 +47,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class MultiTransactionTest extends ClientBase {
     private static final Logger LOG = Logger.getLogger(MultiTransactionTest.class);
     private ZooKeeper zk;
@@ -476,6 +478,7 @@ public class MultiTransactionTest extends ClientBase {
         private final CountDownLatch triggered = new CountDownLatch(1);
 
         @Override
+        @OutputMethod
         public void process(WatchedEvent event) {
             triggered.countDown();
         }

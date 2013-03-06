@@ -42,14 +42,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.txn.TxnHeader;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * A collection of utility methods for dealing with file name parsing, 
  * low level I/O file operations and marshalling/unmarshalling.
  */
 public class Util {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(Util.class);
+	@ReadOnly
     private static final String SNAP_DIR="snapDir";
+	@ReadOnly
     private static final String LOG_DIR="logDir";
+	@ReadOnly
     private static final String DB_FORMAT_CONV="dbFormatConversion";
     private static final ByteBuffer fill = ByteBuffer.allocateDirect(1);
     

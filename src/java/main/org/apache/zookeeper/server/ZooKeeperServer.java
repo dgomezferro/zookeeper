@@ -89,8 +89,8 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
         Environment.logEnv("Server environment:", LOG);
     }
 
-    @ReadOnly
-    public Lock lock = new ReentrantLock();
+//    @ReadOnly
+//    public Lock lock = new ReentrantLock();
 
     @ReadOnly
     protected ZooKeeperServerBean jmxServerBean;
@@ -275,6 +275,11 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
             // so we need to exit
             System.exit(10);
         }
+    }
+    
+    @Override
+    public String toString(){
+    	return "zxid " + hzxid;
     }
 
     /**
@@ -500,6 +505,14 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
             }
             return new ChangeRecord(zxid, path, stat, childCount,
                     acl == null ? new ArrayList<ACL>() : new ArrayList<ACL>(acl));
+        }
+        
+        public String toString(){
+        	return "Change record - zxid: " + zxid +
+        			" path: " + path +
+        			" stat: " + stat +
+        			" childCount: " + childCount +
+        			" acl: " + acl;
         }
     }
 

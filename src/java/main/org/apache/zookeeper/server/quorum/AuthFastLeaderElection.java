@@ -44,11 +44,14 @@ import org.apache.zookeeper.server.quorum.Vote;
 import org.apache.zookeeper.server.quorum.QuorumPeer.QuorumServer;
 import org.apache.zookeeper.server.quorum.QuorumPeer.ServerState;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * @deprecated This class has been deprecated as of release 3.4.0. 
  */
 @Deprecated
 public class AuthFastLeaderElection implements Election {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(AuthFastLeaderElection.class);
 
     /* Sequence numbers for messages */

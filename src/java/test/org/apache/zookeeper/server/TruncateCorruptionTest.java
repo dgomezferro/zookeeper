@@ -40,6 +40,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.OutputMethod;
+
 /**
  * Verify ZOOKEEPER-1489 - cause truncation followed by continued append to the
  * snaplog, verify that the newly appended information (after the truncation) is
@@ -249,7 +251,8 @@ public class TruncateCorruptionTest extends ZKTestCase {
             this.clientId = clientId;
         }
 
-        public void process(WatchedEvent event) {
+       @OutputMethod
+       public void process(WatchedEvent event) {
             LOG.info("<<<EVENT>>> " + clientId + " - WatchedEvent: "
                     + event);
         }

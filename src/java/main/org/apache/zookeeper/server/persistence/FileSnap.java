@@ -42,6 +42,8 @@ import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.server.DataTree;
 import org.apache.zookeeper.server.util.SerializeUtils;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class implements the snapshot interface.
  * it is responsible for storing, serializing
@@ -51,8 +53,11 @@ import org.apache.zookeeper.server.util.SerializeUtils;
 public class FileSnap implements SnapShot {
     File snapDir;
     private volatile boolean close = false;
+    @ReadOnly
     private static final int VERSION=2;
+    @ReadOnly
     private static final long dbId=-1;
+    @ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(FileSnap.class);
     public final static int SNAP_MAGIC
         = ByteBuffer.wrap("ZKSN".getBytes()).getInt();

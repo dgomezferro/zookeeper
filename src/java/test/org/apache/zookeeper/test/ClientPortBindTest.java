@@ -41,6 +41,8 @@ import org.apache.zookeeper.server.ZooKeeperServer;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class ClientPortBindTest extends ZKTestCase implements Watcher {
     protected static final Logger LOG = 
         LoggerFactory.getLogger(ClientPortBindTest.class);
@@ -106,6 +108,7 @@ public class ClientPortBindTest extends ZKTestCase implements Watcher {
         }
     }
 
+    @OutputMethod
     public void process(WatchedEvent event) {
         LOG.info("Event:" + event.getState() + " " + event.getType() + " " + event.getPath());
         if (event.getState() == KeeperState.SyncConnected

@@ -29,12 +29,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 
 /**
  * Most simple HostProvider, resolves only on instantiation.
  * 
  */
 public final class StaticHostProvider implements HostProvider {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory
             .getLogger(StaticHostProvider.class);
 

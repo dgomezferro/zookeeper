@@ -52,12 +52,14 @@ import org.apache.zookeeper.server.quorum.Leader;
 import org.apache.zookeeper.server.quorum.LeaderZooKeeperServer;
 import org.apache.zookeeper.server.quorum.ReadOnlyZooKeeperServer;
 import com.sun.management.UnixOperatingSystemMXBean;
+import com.yahoo.aasc.ReadOnly;
 
 /**
  * This class handles communication with clients using NIO. There is one per
  * client, but only one thread doing the communication.
  */
 public class NIOServerCnxn extends ServerCnxn {
+	@ReadOnly
     static final Logger LOG = LoggerFactory.getLogger(NIOServerCnxn.class);
 
     NIOServerCnxnFactory factory;

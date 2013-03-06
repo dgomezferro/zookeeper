@@ -28,6 +28,8 @@ import org.apache.zookeeper.AsyncCallback.StringCallback;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.data.Stat;
 
+import com.yahoo.aasc.OutputMethod;
+
 /**
  * The client that gets spawned for the SimpleSysTest 
  *
@@ -66,6 +68,7 @@ public class SimpleClient implements Instance, Watcher, AsyncCallback.DataCallba
             e.printStackTrace();
         }
     }
+    @OutputMethod
     public void process(WatchedEvent event) {
         if (event.getPath() != null && event.getPath().equals("/simpleCase")) {
             zk.getData("/simpleCase", true, this, null);

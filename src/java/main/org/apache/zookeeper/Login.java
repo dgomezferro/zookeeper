@@ -34,6 +34,9 @@ import javax.security.auth.callback.CallbackHandler;
 
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.client.ZooKeeperSaslClient;
+
+import com.yahoo.aasc.ReadOnly;
+
 import javax.security.auth.kerberos.KerberosTicket;
 import javax.security.auth.Subject;
 import java.util.Date;
@@ -41,6 +44,7 @@ import java.util.Random;
 import java.util.Set;
 
 public class Login {
+	@ReadOnly
     Logger LOG = Logger.getLogger(Login.class);
     public CallbackHandler callbackHandler;
 

@@ -25,11 +25,14 @@ import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * setQuota command for cli
  */
 public class SetQuotaCommand extends CliCommand {
 
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(SetQuotaCommand.class);
     private Options options = new Options();
     private String[] args;

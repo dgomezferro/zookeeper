@@ -26,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class manages the cleanup of snapshots and corresponding transaction
  * logs by scheduling the auto purge task with the specified
@@ -35,6 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DatadirCleanupManager {
 
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(DatadirCleanupManager.class);
 
     /**
@@ -46,8 +49,10 @@ public class DatadirCleanupManager {
 
     private PurgeTaskStatus purgeTaskStatus = PurgeTaskStatus.NOT_STARTED;
 
+    @ReadOnly
     private final File snapDir;
 
+    @ReadOnly
     private final File dataLogDir;
 
     private final int snapRetainCount;

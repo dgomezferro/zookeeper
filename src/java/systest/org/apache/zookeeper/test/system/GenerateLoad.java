@@ -54,6 +54,8 @@ import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.WatchedEvent;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class GenerateLoad {
     protected static final Logger LOG = LoggerFactory.getLogger(GenerateLoad.class);
 
@@ -365,6 +367,7 @@ public class GenerateLoad {
                 }
             }
 
+            @OutputMethod
             public void process(WatchedEvent event) {
                 System.err.println(event);
                 synchronized (this) {

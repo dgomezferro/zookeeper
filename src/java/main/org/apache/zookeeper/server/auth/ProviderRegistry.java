@@ -26,7 +26,10 @@ import org.slf4j.LoggerFactory;
 
 import org.apache.zookeeper.server.ZooKeeperServer;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class ProviderRegistry {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ProviderRegistry.class);
 
     private static boolean initialized = false;

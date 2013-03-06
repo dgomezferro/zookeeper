@@ -20,6 +20,8 @@ package org.apache.zookeeper.client;
 
 import org.apache.log4j.Logger;
 
+import com.yahoo.aasc.ReadOnly;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,6 +29,7 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class FourLetterWordMain {
+	@ReadOnly
     protected static final Logger LOG = Logger.getLogger(FourLetterWordMain.class);
     
     /**

@@ -49,6 +49,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class SessionTest extends ZKTestCase {
     protected static final Logger LOG = LoggerFactory.getLogger(SessionTest.class);
 
@@ -92,6 +94,7 @@ public class SessionTest extends ZKTestCase {
     private static class CountdownWatcher implements Watcher {
         volatile CountDownLatch clientConnected = new CountDownLatch(1);
 
+        @OutputMethod
         public void process(WatchedEvent event) {
             if (event.getState() == KeeperState.SyncConnected) {
                 clientConnected.countDown();

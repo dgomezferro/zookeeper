@@ -33,6 +33,8 @@ import org.apache.zookeeper.server.quorum.Leader.XidRolloverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This processor is at the beginning of the ReadOnlyZooKeeperServer's
  * processors chain. All it does is, it passes read-only operations (e.g.
@@ -41,6 +43,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ReadOnlyRequestProcessor extends Thread implements RequestProcessor {
 
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ReadOnlyRequestProcessor.class);
 
     private final LinkedBlockingQueue<Request> queuedRequests = new LinkedBlockingQueue<Request>();

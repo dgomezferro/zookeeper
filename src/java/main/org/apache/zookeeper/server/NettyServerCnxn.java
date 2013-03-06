@@ -56,8 +56,10 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.MessageEvent;
 
 import com.sun.management.UnixOperatingSystemMXBean;
+import com.yahoo.aasc.ReadOnly;
 
 public class NettyServerCnxn extends ServerCnxn {
+	@ReadOnly
     Logger LOG = LoggerFactory.getLogger(NettyServerCnxn.class);
     Channel channel;
     ChannelBuffer queuedBuffer;

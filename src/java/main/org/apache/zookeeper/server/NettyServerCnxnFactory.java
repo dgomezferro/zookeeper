@@ -45,7 +45,10 @@ import org.jboss.netty.channel.group.ChannelGroup;
 import org.jboss.netty.channel.group.DefaultChannelGroup;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class NettyServerCnxnFactory extends ServerCnxnFactory {
+	@ReadOnly
     Logger LOG = LoggerFactory.getLogger(NettyServerCnxnFactory.class);
 
     ServerBootstrap bootstrap;

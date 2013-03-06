@@ -153,7 +153,10 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
     private ChangeRecord getRecordForPath(String path) throws KeeperException.NoNodeException {
         ChangeRecord lastChange = null;
         synchronized (zks.outstandingChanges) {
-            lastChange = zks.outstandingChangesForPath.get(path);
+        	lastChange = zks.outstandingChangesForPath.get(path);
+        	
+        	LOG.trace("lastChange = " + lastChange);
+        	
             /*
             for (int i = 0; i < zks.outstandingChanges.size(); i++) {
                 ChangeRecord c = zks.outstandingChanges.get(i);
@@ -345,7 +348,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
                 }
                 String parentPath = path.substring(0, lastSlash);
                 ChangeRecord parentRecord = getRecordForPath(parentPath);
-
+                
                 checkACL(zks, parentRecord.acl, ZooDefs.Perms.CREATE, request.authInfo);
                 int parentCVersion = parentRecord.stat.getCversion();
                 CreateMode createMode = CreateMode.fromFlag(createRequest.getFlags());
@@ -361,6 +364,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
                 }
                 try {
                     if (getRecordForPath(path) != null) {
+                    	LOG.trace("Node " + path + " exists");
                         throw new KeeperException.NodeExistsException(path);
                     }
                 } catch (KeeperException.NoNodeException e) {
@@ -368,6 +372,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
                 }
                 boolean ephemeralParent = parentRecord.stat.getEphemeralOwner() != 0;
                 if (ephemeralParent) {
+                	LOG.trace("Parent is ephemeral");
                     throw new KeeperException.NoChildrenForEphemeralsException(path);
                 }
                 int newCversion = parentRecord.stat.getCversion()+1;
@@ -503,23 +508,23 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
      * @param request
      */
     protected void pRequest(Request request) throws RequestProcessorException {
-        zks.lock.lock();
+//        zks.lock.lock();
         Request r;
-        try {
+//        try {
             r = pascRequest(request);
-        } finally {
-            zks.lock.unlock();
-        }
+//        } finally {
+//            zks.lock.unlock();
+//        }
         nextProcessor.processRequest(r);
     }
 
     @MessageHandler
     private Request pascRequest(Request request) {
-        // LOG.info("Prep>>> cxid = " + request.cxid + " type = " +
-        // request.type + " id = 0x" + Long.toHexString(request.sessionId));
+        LOG.info("Prep>>> cxid = " + request.cxid + " type = " +
+         request.type + " id = 0x" + Long.toHexString(request.sessionId));
         request.setHdr(null);
         request.setTxn(null);
-
+        
         try {
             switch (request.type) {
                 case OpCode.create:
@@ -615,6 +620,7 @@ public class PrepRequestProcessor extends Thread implements RequestProcessor {
             //create/close session don't require request record
             case OpCode.createSession:
             case OpCode.closeSession:
+            	LOG.trace("Processing createSession or closeSession");
                 pRequest2Txn(request.type, zks.getNextZxid(), request, null, true);
                 break;
 

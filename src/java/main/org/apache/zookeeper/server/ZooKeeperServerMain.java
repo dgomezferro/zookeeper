@@ -29,10 +29,13 @@ import org.apache.zookeeper.server.quorum.QuorumPeerConfig.ConfigException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class starts and runs a standalone ZooKeeperServer.
  */
 public class ZooKeeperServerMain {
+	@ReadOnly
     private static final Logger LOG =
         LoggerFactory.getLogger(ZooKeeperServerMain.class);
 

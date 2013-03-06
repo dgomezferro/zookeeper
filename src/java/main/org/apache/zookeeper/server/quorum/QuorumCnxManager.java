@@ -34,8 +34,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.yahoo.aasc.ReadOnly;
 
 /**
  * This class implements a connection manager for leader election using TCP. It
@@ -58,6 +61,7 @@ import org.slf4j.LoggerFactory;
  */
 
 public class QuorumCnxManager {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(QuorumCnxManager.class);
 
     /*

@@ -27,7 +27,10 @@ import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.data.Id;
 import org.apache.zookeeper.server.ServerCnxn;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class DigestAuthenticationProvider implements AuthenticationProvider {
+	@ReadOnly
     private static final Logger LOG =
         LoggerFactory.getLogger(DigestAuthenticationProvider.class);
 

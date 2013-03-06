@@ -117,7 +117,7 @@ public class FinalRequestProcessor implements RequestProcessor {
             if (request.getHdr() != null) {
                 TxnHeader hdr = request.getHdr();
                 Record txn = request.getTxn();
-                
+                LOG.trace("Processing transaction with header  " + hdr + " and record " + txn);
                 rc = zks.processTxn(hdr, txn);
             }
             // do not add non quorum packets to the queue.
@@ -407,12 +407,12 @@ public class FinalRequestProcessor implements RequestProcessor {
 
     public void processRequest(Request request) {
         Response response;
-        zks.lock.lock();
-        try {
+//        zks.lock.lock();
+//        try {
             response = pascProcessRequest(request);
-        } finally {
-            zks.lock.unlock();
-        }
+//        } finally {
+//            zks.lock.unlock();
+//        }
         ServerCnxn cnxn = request.cnxn;
         
         if (response == null) {

@@ -29,12 +29,15 @@ import org.apache.zookeeper.server.SyncRequestProcessor;
 import org.apache.zookeeper.server.ZKDatabase;
 import org.apache.zookeeper.server.persistence.FileTxnSnapLog;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * A ZooKeeperServer for the Observer node type. Not much is different, but
  * we anticipate specializing the request processors in the future. 
  *
  */
 public class ObserverZooKeeperServer extends LearnerZooKeeperServer {
+	@ReadOnly
     private static final Logger LOG =
         LoggerFactory.getLogger(ObserverZooKeeperServer.class);        
     

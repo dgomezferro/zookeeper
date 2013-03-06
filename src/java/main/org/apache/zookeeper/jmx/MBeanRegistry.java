@@ -31,6 +31,8 @@ import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class provides a unified interface for registering/unregistering of
  * zookeeper MBeans with the platform MBean server. It builds a hierarchy of MBeans
@@ -38,6 +40,7 @@ import org.slf4j.LoggerFactory;
  * will be stored in the zookeeper data tree instance as a virtual data tree.
  */
 public class MBeanRegistry {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(MBeanRegistry.class);
     
     private static MBeanRegistry instance = new MBeanRegistry(); 

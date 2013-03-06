@@ -39,6 +39,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class InvalidSnapshotTest extends ZKTestCase implements Watcher {
     private final static Logger LOG = LoggerFactory.getLogger(InvalidSnapshotTest.class);
     private static final String HOSTPORT =
@@ -101,6 +103,7 @@ public class InvalidSnapshotTest extends ZKTestCase implements Watcher {
 
     }
 
+    @OutputMethod
     public void process(WatchedEvent event) {
         LOG.info("Event:" + event.getState() + " " + event.getType() + " " + event.getPath());
         if (event.getState() == KeeperState.SyncConnected

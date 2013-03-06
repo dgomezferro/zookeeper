@@ -48,6 +48,8 @@ import org.apache.zookeeper.AsyncCallback.StatCallback;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
 import org.apache.zookeeper.data.Stat;
 
+import com.yahoo.aasc.OutputMethod;
+
 public class IntegrityCheck implements Watcher, StatCallback, DataCallback {
     private static final Logger LOG = LoggerFactory.getLogger(IntegrityCheck.class);
 
@@ -148,6 +150,7 @@ public class IntegrityCheck implements Watcher, StatCallback, DataCallback {
     }
 
     // watcher callback
+    @OutputMethod
     public void process(WatchedEvent event) {
         if(event.getState()==KeeperState.SyncConnected){
             synchronized(this){

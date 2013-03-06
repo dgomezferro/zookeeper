@@ -38,6 +38,8 @@ import org.apache.zookeeper.txn.TxnHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This is a helper class
  * above the implementations
@@ -55,7 +57,8 @@ public class FileTxnSnapLog {
     private SnapShot snapLog;
     public final static int VERSION = 2;
     public final static String version = "version-";
-
+    
+    @ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(FileTxnSnapLog.class);
 
     public static final String ZOOKEEPER_DATADIR_AUTOCREATE =

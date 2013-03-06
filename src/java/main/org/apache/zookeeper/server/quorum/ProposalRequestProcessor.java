@@ -25,11 +25,14 @@ import org.apache.zookeeper.server.quorum.Leader.XidRolloverException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This RequestProcessor simply forwards requests to an AckRequestProcessor and
  * SyncRequestProcessor.
  */
 public class ProposalRequestProcessor implements RequestProcessor {
+	@ReadOnly
     private static final Logger LOG =
         LoggerFactory.getLogger(ProposalRequestProcessor.class);
 

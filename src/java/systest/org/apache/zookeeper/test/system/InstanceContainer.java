@@ -41,6 +41,8 @@ import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.test.system.Instance.Reporter;
 
+import com.yahoo.aasc.OutputMethod;
+
 /**
  * This class starts up,
  */
@@ -52,7 +54,8 @@ public class InstanceContainer implements Watcher, AsyncCallback.ChildrenCallbac
             this.myNode = myNode;
             this.dc = dc;
         }
-        public void process(WatchedEvent event) {
+       @OutputMethod
+       public void process(WatchedEvent event) {
             if (event.getPath() != null && event.getPath().equals(myNode)) {
                 zk.getData(myNode, this, dc, this);
             }

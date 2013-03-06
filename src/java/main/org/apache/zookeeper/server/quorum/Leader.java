@@ -47,10 +47,14 @@ import org.apache.zookeeper.server.util.ZxidUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.OutputMethod;
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class has the control logic for the Leader.
  */
 public class Leader {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(Leader.class);
 
     static final private boolean nodelay = System.getProperty("leader.nodelay", "true").equals("true");
@@ -876,6 +880,7 @@ public class Leader {
 
     private final HashSet<Long> electingFollowers = new HashSet<Long>();
     private boolean electionFinished = false;
+    @OutputMethod
     public void waitForEpochAck(long id, StateSummary ss) throws IOException, InterruptedException {
         synchronized(electingFollowers) {
             if (electionFinished) {

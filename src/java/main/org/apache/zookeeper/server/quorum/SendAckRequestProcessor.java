@@ -28,7 +28,10 @@ import org.apache.zookeeper.ZooDefs.OpCode;
 import org.apache.zookeeper.server.Request;
 import org.apache.zookeeper.server.RequestProcessor;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class SendAckRequestProcessor implements RequestProcessor, Flushable {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(SendAckRequestProcessor.class);
 
     Learner learner;

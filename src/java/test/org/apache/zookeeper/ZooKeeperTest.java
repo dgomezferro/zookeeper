@@ -43,25 +43,42 @@ public class ZooKeeperTest extends ClientBase {
         final ZooKeeper zk = createClient();
         // making sure setdata works on /
         zk.setData("/", "some".getBytes(), -1);
+
+        LOG.trace("Completed command");
+
         zk.create("/a", "some".getBytes(), Ids.OPEN_ACL_UNSAFE,
                 CreateMode.PERSISTENT);
+        
+        LOG.trace("Completed command");
 
         zk.create("/a/b", "some".getBytes(), Ids.OPEN_ACL_UNSAFE,
                 CreateMode.PERSISTENT);
 
+        LOG.trace("Completed command");
+
         zk.create("/a/b/v", "some".getBytes(), Ids.OPEN_ACL_UNSAFE,
                 CreateMode.PERSISTENT);
+
+        LOG.trace("Completed command");
 
         zk.create("/a/b/v/1", "some".getBytes(), Ids.OPEN_ACL_UNSAFE,
                 CreateMode.PERSISTENT);
 
+        LOG.trace("Completed command");
+
         zk.create("/a/c", "some".getBytes(), Ids.OPEN_ACL_UNSAFE,
                 CreateMode.PERSISTENT);
+
+        LOG.trace("Completed command");
 
         zk.create("/a/c/v", "some".getBytes(), Ids.OPEN_ACL_UNSAFE,
                 CreateMode.PERSISTENT);
 
+        LOG.trace("Completed command");
+
         List<String> children = zk.getChildren("/a", false);
+
+        LOG.trace("Completed command");
 
         Assert.assertEquals("2 children - b & c should be present ", children
                 .size(), 2);

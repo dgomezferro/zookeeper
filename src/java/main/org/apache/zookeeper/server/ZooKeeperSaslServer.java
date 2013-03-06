@@ -29,10 +29,13 @@ import javax.security.sasl.SaslException;
 import javax.security.sasl.SaslServer;
 import org.apache.zookeeper.Login;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class ZooKeeperSaslServer {
     public static final String LOGIN_CONTEXT_NAME_KEY = "zookeeper.sasl.serverconfig";
     public static final String DEFAULT_LOGIN_CONTEXT_NAME = "Server";
 
+    @ReadOnly
     Logger LOG = LoggerFactory.getLogger(ZooKeeperSaslServer.class);
     private SaslServer saslServer;
 

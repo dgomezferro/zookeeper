@@ -76,6 +76,8 @@ import org.apache.zookeeper.server.ZooTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * This class manages the socket i/o for the client. ClientCnxn maintains a list
  * of available servers to connect to and "transparently" switches servers it is
@@ -83,6 +85,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ClientCnxn {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ClientCnxn.class);
 
     /** This controls whether automatic watch resetting is enabled.

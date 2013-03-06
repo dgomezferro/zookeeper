@@ -31,10 +31,13 @@ import org.slf4j.LoggerFactory;
 import org.apache.zookeeper.jmx.MBeanRegistry;
 import org.apache.zookeeper.jmx.ZKMBeanInfo;
 
+import com.yahoo.aasc.ReadOnly;
+
 /**
  * Implementation of connection MBean interface.
  */
 public class ConnectionBean implements ConnectionMXBean, ZKMBeanInfo {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionBean.class);
 
     private final ServerCnxn connection;

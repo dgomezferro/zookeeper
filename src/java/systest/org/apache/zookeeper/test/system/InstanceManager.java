@@ -39,6 +39,8 @@ import org.apache.zookeeper.KeeperException.NodeExistsException;
 import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.data.Stat;
 
+import com.yahoo.aasc.OutputMethod;
+
 /**
  * This class doles out assignments to InstanceContainers that are registered to
  * a ZooKeeper znode. The znode will have four child nodes:
@@ -158,6 +160,7 @@ public class InstanceManager implements AsyncCallback.ChildrenCallback, Watcher 
         assignments = newAssignments;
     }
     
+    @OutputMethod
     public void process(WatchedEvent event) {
         if (event.getPath().equals(statusNode)) {
             zk.getChildren(statusNode, this, this, null);

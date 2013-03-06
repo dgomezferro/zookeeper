@@ -35,7 +35,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 public class NIOServerCnxnFactory extends ServerCnxnFactory implements Runnable {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(NIOServerCnxnFactory.class);
 
     static {

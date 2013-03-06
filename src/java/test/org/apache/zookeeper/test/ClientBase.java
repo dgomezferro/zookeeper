@@ -61,6 +61,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sun.management.UnixOperatingSystemMXBean;
+import com.yahoo.aasc.OutputMethod;
 
 public abstract class ClientBase extends ZKTestCase {
     protected static final Logger LOG = LoggerFactory.getLogger(ClientBase.class);
@@ -102,7 +103,8 @@ public abstract class ClientBase extends ZKTestCase {
             clientConnected = new CountDownLatch(1);
             connected = false;
         }
-        synchronized public void process(WatchedEvent event) {
+        @OutputMethod
+       synchronized public void process(WatchedEvent event) {
             if (event.getState() == KeeperState.SyncConnected ||
                 event.getState() == KeeperState.ConnectedReadOnly) {
                 connected = true;

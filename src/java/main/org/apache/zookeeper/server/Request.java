@@ -38,6 +38,7 @@ import com.yahoo.aasc.ReadOnly;
  */
 @Introspect
 public class Request extends HandlerIO {
+	@ReadOnly
     public final static Request requestOfDeath = new Request(null, 0, 0, 0, null, null);
 
     public Request(ServerCnxn cnxn, long sessionId, int xid, int type, ByteBuffer bb, List<Id> authInfo) {
@@ -78,6 +79,7 @@ public class Request extends HandlerIO {
 
     public long zxid = -1;
 
+    @ReadOnly
     public final List<Id> authInfo;
 
     public final long createTime = System.currentTimeMillis();

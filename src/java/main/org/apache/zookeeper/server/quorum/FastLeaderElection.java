@@ -36,6 +36,8 @@ import org.apache.zookeeper.server.util.ZxidUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yahoo.aasc.ReadOnly;
+
 
 /**
  * Implementation of leader election using TCP. It uses an object of the class
@@ -49,6 +51,7 @@ import org.slf4j.LoggerFactory;
 
 
 public class FastLeaderElection implements Election {
+	@ReadOnly
     private static final Logger LOG = LoggerFactory.getLogger(FastLeaderElection.class);
 
     /**
@@ -56,6 +59,7 @@ public class FastLeaderElection implements Election {
      * once it believes that it has reached the end of
      * leader election.
      */
+	@ReadOnly
     final static int finalizeWait = 200;
 
 
@@ -65,6 +69,7 @@ public class FastLeaderElection implements Election {
      * the system up again after long partitions. Currently 60 seconds.
      */
 
+	@ReadOnly
     final static int maxNotificationInterval = 60000;
 
     /**
