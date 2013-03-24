@@ -31,6 +31,7 @@ import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.Watcher.Event.EventType;
 import org.apache.zookeeper.Watcher.Event.KeeperState;
 
+import com.yahoo.aasc.OutputMethod;
 import com.yahoo.aasc.ReadOnly;
 
 /**
@@ -57,6 +58,7 @@ class WatchManager {
         return result;
     }
 
+   	@OutputMethod
     synchronized void addWatch(String path, Watcher watcher) {
         HashSet<Watcher> list = watchTable.get(path);
         if (list == null) {
@@ -77,6 +79,7 @@ class WatchManager {
         paths.add(path);
     }
 
+   	@OutputMethod
     synchronized void removeWatcher(Watcher watcher) {
         HashSet<String> paths = watch2Paths.remove(watcher);
         if (paths == null) {
@@ -93,10 +96,12 @@ class WatchManager {
         }
     }
 
+   	@OutputMethod
     Set<Watcher> triggerWatch(String path, EventType type) {
         return triggerWatch(path, type, null);
     }
 
+   	@OutputMethod
     Set<Watcher> triggerWatch(String path, EventType type, Set<Watcher> supress) {
         WatchedEvent e = new WatchedEvent(type,
                 KeeperState.SyncConnected, path);

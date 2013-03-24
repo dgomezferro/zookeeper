@@ -29,6 +29,7 @@ import org.apache.zookeeper.data.Stat;
 import org.apache.zookeeper.data.StatPersisted;
 
 import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.MessageHandler;
 import com.yahoo.aasc.ReadOnly;
 
 /**
@@ -92,6 +93,7 @@ public class DataNode implements Record {
      *            to be inserted
      * @return true if this set did not already contain the specified element
      */
+    @MessageHandler
     public synchronized boolean addChild(String child) {
         if (children == null) {
             // let's be conservative on the typical number of children
@@ -106,6 +108,7 @@ public class DataNode implements Record {
      * @param child
      * @return true if this set contained the specified element
      */
+    @MessageHandler
     public synchronized boolean removeChild(String child) {
         if (children == null) {
             return false;
@@ -118,6 +121,7 @@ public class DataNode implements Record {
      * 
      * @param children
      */
+    @MessageHandler
     public synchronized void setChildren(HashSet<String> children) {
         this.children = children;
     }
@@ -127,15 +131,18 @@ public class DataNode implements Record {
      * 
      * @return the children of this datanode
      */
+    @MessageHandler
     public synchronized Set<String> getChildren() {
         return children;
     }
 
+    @MessageHandler
     public synchronized long getApproximateDataSize() {
         if(null==data) return 0;
         return data.length;
     }
 
+    @MessageHandler
     synchronized public void copyStat(Stat to) {
         to.setAversion(stat.getAversion());
         to.setCtime(stat.getCtime());

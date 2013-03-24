@@ -63,7 +63,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yahoo.aasc.Introspect;
+import com.yahoo.aasc.MessageHandler;
 import com.yahoo.aasc.ReadOnly;
+import com.yahoo.aasc.OutputMethod;
 
 /**
  * This class maintains the tree data structure. It doesn't have any networking
@@ -140,6 +142,7 @@ public class DataTree {
     private long aclIndex = 0;
 
     @SuppressWarnings("unchecked")
+    @MessageHandler
     public Set<String> getEphemerals(long sessionId) {
         HashSet<String> retv = ephemerals.get(sessionId);
         if (retv == null) {
@@ -152,10 +155,12 @@ public class DataTree {
         return cloned;
     }
 
+    @MessageHandler
     int getAclSize() {
         return longKeyMap.size();
     }
 
+    @MessageHandler
     private long incrementIndex() {
         return ++aclIndex;
     }
@@ -166,6 +171,7 @@ public class DataTree {
      * @param acls
      * @return a list of longs that map to the acls
      */
+    @MessageHandler
     public synchronized Long convertAcls(List<ACL> acls) {
         if (acls == null)
             return -1L;
@@ -187,11 +193,14 @@ public class DataTree {
      *            the list of longs
      * @return a list of ACLs that map to longs
      */
+    @MessageHandler
     public synchronized List<ACL> convertLong(Long longVal) {
         if (longVal == null)
             return null;
-        if (longVal == -1L)
-            return Ids.OPEN_ACL_UNSAFE;
+        if (longVal == -1L){
+//        	LOG.trace("Returning Ids with hash " + System.identityHashCode(Ids.OPEN_ACL_UNSAFE));
+            return Ids.OPEN_ACL_UNSAFE;        	
+        }
         List<ACL> acls = longKeyMap.get(longVal);
         if (acls == null) {
             LOG.error("ERROR: ACL not available for long " + longVal);
@@ -200,22 +209,27 @@ public class DataTree {
         return acls;
     }
 
+    @MessageHandler
     public Collection<Long> getSessions() {
         return ephemerals.keySet();
     }
 
+    @MessageHandler
     public DataNode getNode(String path) {
         return nodes.get(path);
     }
 
+    @MessageHandler
     public int getNodeCount() {
         return nodes.size();
     }
 
+    @MessageHandler
     public int getWatchCount() {
         return dataWatches.size() + childWatches.size();
     }
 
+    @MessageHandler
     int getEphemeralsCount() {
         int result = 0;
         for (HashSet<String> set : ephemerals.values()) {
@@ -229,6 +243,7 @@ public class DataTree {
      *
      * @return size of the data
      */
+    @MessageHandler
     public long approximateDataSize() {
         long result = 0;
         for (Map.Entry<String, DataNode> entry : nodes.entrySet()) {
@@ -278,6 +293,7 @@ public class DataTree {
      *            the path to be checked
      * @return true if a special path. false if not.
      */
+    @MessageHandler
     boolean isSpecialPath(String path) {
         if (rootZookeeper.equals(path) || procZookeeper.equals(path)
                 || quotaZookeeper.equals(path)) {
@@ -286,6 +302,7 @@ public class DataTree {
         return false;
     }
 
+    @MessageHandler
     static public void copyStatPersisted(StatPersisted from, StatPersisted to) {
         to.setAversion(from.getAversion());
         to.setCtime(from.getCtime());
@@ -298,6 +315,7 @@ public class DataTree {
         to.setEphemeralOwner(from.getEphemeralOwner());
     }
 
+    @MessageHandler
     static public void copyStat(Stat from, Stat to) {
         to.setAversion(from.getAversion());
         to.setCtime(from.getCtime());
@@ -320,6 +338,7 @@ public class DataTree {
      * @param diff
      *            the diff to be added to the count
      */
+    @MessageHandler
     public void updateCount(String lastPrefix, int diff) {
         String statNode = Quotas.statPath(lastPrefix);
         DataNode node = nodes.get(statNode);
@@ -364,6 +383,7 @@ public class DataTree {
      * @throws IOException
      *             if path is not found
      */
+    @MessageHandler
     public void updateBytes(String lastPrefix, long diff) {
         String statNode = Quotas.statPath(lastPrefix);
         DataNode node = nodes.get(statNode);
@@ -411,6 +431,7 @@ public class DataTree {
      * @param time
      * @throws KeeperException
      */
+    @MessageHandler
     public void createNode(final String path, byte data[], List<ACL> acl,
             long ephemeralOwner, int parentCVersion, long zxid, long time)
             throws KeeperException.NoNodeException,
@@ -492,6 +513,7 @@ public class DataTree {
      *            the current zxid
      * @throws KeeperException.NoNodeException
      */
+    @MessageHandler
     public void deleteNode(String path, long zxid)
             throws KeeperException.NoNodeException {
         int lastSlash = path.lastIndexOf('/');
@@ -551,6 +573,7 @@ public class DataTree {
                 EventType.NodeChildrenChanged);
     }
 
+    @MessageHandler
     public Stat setData(String path, byte data[], int version, long zxid,
             long time) throws KeeperException.NoNodeException {
         Stat s = new Stat();
@@ -583,6 +606,7 @@ public class DataTree {
      * @param path The ZK path to check for quota
      * @return Max quota prefix, or null if none
      */
+    @MessageHandler
     public String getMaxPrefixWithQuota(String path) {
         // do nothing for the root.
         // we are not keeping a quota on the zookeeper
@@ -597,6 +621,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public byte[] getData(String path, Stat stat, Watcher watcher)
             throws KeeperException.NoNodeException {
         DataNode n = nodes.get(path);
@@ -612,6 +637,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public Stat statNode(String path, Watcher watcher)
             throws KeeperException.NoNodeException {
         Stat stat = new Stat();
@@ -628,6 +654,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public List<String> getChildren(String path, Stat stat, Watcher watcher)
             throws KeeperException.NoNodeException {
         DataNode n = nodes.get(path);
@@ -653,6 +680,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public Stat setACL(String path, List<ACL> acl, int version)
             throws KeeperException.NoNodeException {
         Stat stat = new Stat();
@@ -668,6 +696,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public List<ACL> getACL(String path, Stat stat)
             throws KeeperException.NoNodeException {
         DataNode n = nodes.get(path);
@@ -680,6 +709,7 @@ public class DataTree {
         }
     }
 
+    @Introspect
     static public class ProcessTxnResult {
         public long clientId;
 
@@ -727,6 +757,7 @@ public class DataTree {
 
     public volatile long lastProcessedZxid = 0;
 
+    @MessageHandler
     public ProcessTxnResult processTxn(TxnHeader header, Record txn)
     {
         ProcessTxnResult rc = new ProcessTxnResult();
@@ -906,6 +937,7 @@ public class DataTree {
         return rc;
     }
 
+    @MessageHandler
     void killSession(long session, long zxid) {
         // the list is already removed from the ephemerals
         // so we do not have to worry about synchronizing on
@@ -936,6 +968,7 @@ public class DataTree {
     /**
      * a encapsultaing class for return value
      */
+    @Introspect
     private static class Counts {
         long bytes;
         int count;
@@ -949,6 +982,7 @@ public class DataTree {
      * @param counts
      *            the int count
      */
+    @MessageHandler
     private void getCounts(String path, Counts counts) {
         DataNode node = getNode(path);
         if (node == null) {
@@ -980,6 +1014,7 @@ public class DataTree {
      * @param path
      *            the path to be used
      */
+    @MessageHandler
     private void updateQuotaForPath(String path) {
         Counts c = new Counts();
         getCounts(path, c);
@@ -1003,6 +1038,7 @@ public class DataTree {
      *
      * @param path
      */
+    @MessageHandler
     private void traverseNode(String path) {
         DataNode node = getNode(path);
         String children[] = null;
@@ -1036,6 +1072,7 @@ public class DataTree {
     /**
      * this method sets up the path trie and sets up stats for quota nodes
      */
+    @MessageHandler
     private void setupQuota() {
         String quotaPath = Quotas.quotaZookeeper;
         DataNode node = getNode(quotaPath);
@@ -1056,6 +1093,7 @@ public class DataTree {
      * @throws IOException
      * @throws InterruptedException
      */
+    @MessageHandler
     void serializeNode(OutputArchive oa, StringBuilder path) throws IOException {
         String pathString = path.toString();
         DataNode node = getNode(pathString);
@@ -1085,6 +1123,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     private void deserializeList(Map<Long, List<ACL>> longKeyMap,
             InputArchive ia) throws IOException {
         int i = ia.readInt("map");
@@ -1107,6 +1146,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     private synchronized void serializeList(Map<Long, List<ACL>> longKeyMap,
             OutputArchive oa) throws IOException {
         oa.writeInt(longKeyMap.size(), "map");
@@ -1122,6 +1162,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public void serialize(OutputArchive oa, String tag) throws IOException {
         serializeList(longKeyMap, oa);
         serializeNode(oa, new StringBuilder(""));
@@ -1132,6 +1173,7 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public void deserialize(InputArchive ia, String tag) throws IOException {
         deserializeList(longKeyMap, ia);
         nodes.clear();
@@ -1175,6 +1217,7 @@ public class DataTree {
      * Summary of the watches on the datatree.
      * @param pwriter the output to write to
      */
+    @OutputMethod
     public synchronized void dumpWatchesSummary(PrintWriter pwriter) {
         pwriter.print(dataWatches.toString());
     }
@@ -1184,6 +1227,7 @@ public class DataTree {
      * Warning, this is expensive, use sparingly!
      * @param pwriter the output to write to
      */
+    @OutputMethod
     public synchronized void dumpWatches(PrintWriter pwriter, boolean byPath) {
         dataWatches.dumpWatches(pwriter, byPath);
     }
@@ -1192,6 +1236,7 @@ public class DataTree {
      * Write a text dump of all the ephemerals in the datatree.
      * @param pwriter the output to write to
      */
+    @OutputMethod
     public void dumpEphemerals(PrintWriter pwriter) {
         Set<Long> keys = ephemerals.keySet();
         pwriter.println("Sessions with Ephemerals ("
@@ -1208,11 +1253,13 @@ public class DataTree {
         }
     }
 
+    @MessageHandler
     public void removeCnxn(Watcher watcher) {
         dataWatches.removeWatcher(watcher);
         childWatches.removeWatcher(watcher);
     }
 
+    @MessageHandler
     public void setWatches(long relativeZxid, List<String> dataWatches,
             List<String> existWatches, List<String> childWatches,
             Watcher watcher) {
@@ -1287,6 +1334,7 @@ public class DataTree {
       * @throws KeeperException.NoNodeException
       *     If znode not found.
       **/
+    @MessageHandler
     public void setCversionPzxid(String path, int newCversion, long zxid)
         throws KeeperException.NoNodeException {
         if (path.endsWith("/")) {
