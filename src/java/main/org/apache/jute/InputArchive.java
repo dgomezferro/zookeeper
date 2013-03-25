@@ -20,41 +20,24 @@ package org.apache.jute;
 
 import java.io.IOException;
 
-import com.yahoo.aasc.InputMethod;
-
 /**
  * Interface that all the Deserializers have to implement.
  *
  */
 public interface InputArchive {
-	@InputMethod
     public byte readByte(String tag) throws IOException;
-	@InputMethod
     public boolean readBool(String tag) throws IOException;
-	@InputMethod
     public int readInt(String tag) throws IOException;
-	@InputMethod
     public long readLong(String tag) throws IOException;
-	@InputMethod
     public float readFloat(String tag) throws IOException;
-	@InputMethod
     public double readDouble(String tag) throws IOException;
-	@InputMethod
     public String readString(String tag) throws IOException;
-	@InputMethod
     public byte[] readBuffer(String tag) throws IOException;
-	@InputMethod
     public void readRecord(Record r, String tag) throws IOException;
-	@InputMethod
     public void startRecord(String tag) throws IOException;
-	@InputMethod
     public void endRecord(String tag) throws IOException;
-	@InputMethod
     public Index startVector(String tag) throws IOException;
-	@InputMethod
     public void endVector(String tag) throws IOException;
-	@InputMethod
     public Index startMap(String tag) throws IOException;
-	@InputMethod
     public void endMap(String tag) throws IOException;
 }

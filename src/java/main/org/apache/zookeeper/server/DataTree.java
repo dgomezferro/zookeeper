@@ -66,6 +66,7 @@ import com.yahoo.aasc.Introspect;
 import com.yahoo.aasc.MessageHandler;
 import com.yahoo.aasc.ReadOnly;
 import com.yahoo.aasc.OutputMethod;
+import com.yahoo.aasc.AASCUtils;
 
 /**
  * This class maintains the tree data structure. It doesn't have any networking
@@ -211,7 +212,9 @@ public class DataTree {
 
     @MessageHandler
     public Collection<Long> getSessions() {
-        return ephemerals.keySet();
+    	Set<Long> sessions = ephemerals.keySet();
+//    	AASCUtils.enableAccess(sessions);
+        return sessions;
     }
 
     @MessageHandler
@@ -1093,7 +1096,6 @@ public class DataTree {
      * @throws IOException
      * @throws InterruptedException
      */
-    @MessageHandler
     void serializeNode(OutputArchive oa, StringBuilder path) throws IOException {
         String pathString = path.toString();
         DataNode node = getNode(pathString);
@@ -1102,8 +1104,8 @@ public class DataTree {
         }
         String children[] = null;
         synchronized (node) {
-            oa.writeString(pathString, "path");
-            oa.writeRecord(node, "node");
+            writeString(oa, pathString, "path");
+            writeRecord(oa, node, "node");
             Set<String> childs = node.getChildren();
             if (childs != null) {
                 children = childs.toArray(new String[childs.size()]);
@@ -1122,21 +1124,31 @@ public class DataTree {
             }
         }
     }
+    
+    @OutputMethod
+    private void writeString(OutputArchive oa, String var, String tag) throws IOException{
+    	oa.writeString(var, tag);
+    }
 
-    @MessageHandler
+    @OutputMethod
+    private void writeRecord(OutputArchive oa, DataNode var, String tag) throws IOException{
+    	oa.writeRecord(var, tag);
+    }
+
     private void deserializeList(Map<Long, List<ACL>> longKeyMap,
             InputArchive ia) throws IOException {
-        int i = ia.readInt("map");
+        int i = AASCUtils.input(ia.readInt("map"));
         while (i > 0) {
-            Long val = ia.readLong("long");
+            Long val = AASCUtils.input(ia.readLong("long"));
             if (aclIndex < val) {
                 aclIndex = val;
             }
             List<ACL> aclList = new ArrayList<ACL>();
-            Index j = ia.startVector("acls");
+            Index j = AASCUtils.input(ia.startVector("acls"));
             while (!j.done()) {
                 ACL acl = new ACL();
                 acl.deserialize(ia, "acl");
+                acl = AASCUtils.input(acl);
                 aclList.add(acl);
                 j.incr();
             }
@@ -1146,7 +1158,7 @@ public class DataTree {
         }
     }
 
-    @MessageHandler
+    @OutputMethod
     private synchronized void serializeList(Map<Long, List<ACL>> longKeyMap,
             OutputArchive oa) throws IOException {
         oa.writeInt(longKeyMap.size(), "map");
@@ -1169,7 +1181,7 @@ public class DataTree {
         // / marks end of stream
         // we need to check if clear had been called in between the snapshot.
         if (root != null) {
-            oa.writeString("/", "path");
+            writeString(oa, "/", "path");
         }
     }
 
@@ -1177,10 +1189,11 @@ public class DataTree {
     public void deserialize(InputArchive ia, String tag) throws IOException {
         deserializeList(longKeyMap, ia);
         nodes.clear();
-        String path = ia.readString("path");
+        String path = AASCUtils.input(ia.readString("path"));
         while (!"/".equals(path)) {
             DataNode node = new DataNode();
             ia.readRecord(node, "node");
+            node = AASCUtils.input(node);
             nodes.put(path, node);
             int lastSlash = path.lastIndexOf('/');
             if (lastSlash == -1) {
@@ -1203,7 +1216,7 @@ public class DataTree {
                     list.add(path);
                 }
             }
-            path = ia.readString("path");
+            path = AASCUtils.input(ia.readString("path"));
         }
         nodes.put("/", root);
         // we are done with deserializing the
@@ -1236,24 +1249,33 @@ public class DataTree {
      * Write a text dump of all the ephemerals in the datatree.
      * @param pwriter the output to write to
      */
-    @OutputMethod
     public void dumpEphemerals(PrintWriter pwriter) {
         Set<Long> keys = ephemerals.keySet();
         pwriter.println("Sessions with Ephemerals ("
                 + keys.size() + "):");
         for (long k : keys) {
-            pwriter.print("0x" + Long.toHexString(k));
-            pwriter.println(":");
+            print(pwriter, "0x" + Long.toHexString(k));
+            println(pwriter, ":");
             HashSet<String> tmp = ephemerals.get(k);
             synchronized (tmp) {
                 for (String path : tmp) {
-                    pwriter.println("\t" + path);
+                    println(pwriter, "\t" + path);
                 }
             }
         }
     }
+    
+    @OutputMethod
+    private void print(PrintWriter pr, String str){
+    	pr.print(str);
+    }
 
-    @MessageHandler
+    @OutputMethod
+    private void println(PrintWriter pr, String str){
+    	pr.println(str);
+    }
+
+    @OutputMethod
     public void removeCnxn(Watcher watcher) {
         dataWatches.removeWatcher(watcher);
         childWatches.removeWatcher(watcher);

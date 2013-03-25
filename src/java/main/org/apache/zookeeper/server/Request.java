@@ -36,7 +36,7 @@ import com.yahoo.aasc.ReadOnly;
  * RequestProcessors. There are various pieces of information that is tacked
  * onto the request as it is processed.
  */
-@Introspect
+//@Introspect
 public class Request extends HandlerIO {
 	@ReadOnly
     public final static Request requestOfDeath = new Request(null, 0, 0, 0, null, null);

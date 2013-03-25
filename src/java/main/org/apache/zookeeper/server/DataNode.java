@@ -133,7 +133,10 @@ public class DataNode implements Record {
      */
     @MessageHandler
     public synchronized Set<String> getChildren() {
-        return children;
+//    	AASCUtils.activated = false;
+    	Set<String> returnVal = children;
+//    	AASCUtils.activated = true;
+        return returnVal;
     }
 
     @MessageHandler

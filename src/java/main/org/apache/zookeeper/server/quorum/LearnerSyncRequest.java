@@ -27,7 +27,7 @@ import org.apache.zookeeper.server.Request;
 import com.yahoo.aasc.Introspect;
 import com.yahoo.aasc.ReadOnly;
 
-@Introspect
+//@Introspect
 public class LearnerSyncRequest extends Request {
     @ReadOnly
 	LearnerHandler fh;

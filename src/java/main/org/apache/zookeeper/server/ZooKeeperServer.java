@@ -78,7 +78,7 @@ import com.yahoo.aasc.ReadOnly;
  * following chain of RequestProcessors to process requests:
  * PrepRequestProcessor -> SyncRequestProcessor -> FinalRequestProcessor
  */
-@Introspect
+//@Introspect
 public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
     @ReadOnly
     protected static final Logger LOG;
@@ -477,7 +477,7 @@ public class ZooKeeperServer implements SessionExpirer, ServerStats.Provider {
      * This structure is used to facilitate information sharing between PrepRP
      * and FinalRP.
      */
-    @Introspect
+//    @Introspect
     static class ChangeRecord {
         ChangeRecord(long zxid, String path, StatPersisted stat, int childCount,
                 List<ACL> acl) {
